@@ -1,0 +1,50 @@
+{
+  "version": 8,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 28,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "common",
+      "hidden": true,
+      "generator": "Ninja Multi-Config",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${hostSystemName}/${presetName}/install"
+      },
+      "environment": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "PATH": "${sourceDir}/build/${hostSystemName}/tools/install/bin${pathListSep}$penv{PATH}"
+      },
+      "binaryDir": "${sourceDir}/build/${hostSystemName}/${presetName}"
+    },
+    {
+      "name": "default",
+      "inherits": "common"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "release",
+      "displayName": "Configures project in release.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "name": "debug",
+      "displayName": "Configures project in debug.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "default"
+        }
+      ]
+    }
+  ],
+  "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json"
+}
