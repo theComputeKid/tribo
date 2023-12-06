@@ -1,7 +1,8 @@
 # * For the poor souls who do not have the latest tools on their system.
 set(CMAKE_CONFIGURATION_TYPES "Release" CACHE STRING "" FORCE)
 
-cmake_minimum_required(VERSION 3.2)
+# * An old, but not too old version of cmake that hasn't been deprecated.
+cmake_minimum_required(VERSION 3.10)
 
 project(
   extra-build-tools

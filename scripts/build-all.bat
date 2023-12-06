@@ -1,5 +1,4 @@
-@REM * CI script for Windows. Builds everything. To be called from the project root directory. To perform a clean specify:
-@REM * ./scripts/ci.bat clean-build
+@REM * Builds everything for Windows. To be called from the project root directory. To perform a clean specify: clean-build
 
 @echo off
 

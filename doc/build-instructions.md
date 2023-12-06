@@ -40,14 +40,16 @@ Note that the helper script redirects all arguments provided to it to the newly 
 ./scripts/cmake.sh --workflow --list-presets
 ```
 
-A helper script is provided for ci pipelines but this can also be used by developers. This will take a longer time, as it builds all the workflow presets used in development. To use this script, on Linux/MacOS, from the project root:
+A helper script is provided for developers to build all configurations. This will take a longer time, as it builds all the workflow presets used in development. To use this script, on Linux/MacOS, from the project root:
 
 ```
-./scripts/ci.sh
+./scripts/build-all.sh clean-build
 ```
 
 On Windows, from the project root:
 
 ```
-.\scripts\ci.bat
+.\scripts\build-all.bat clean-build
 ```
+
+The option `clean-build` additionally cleans the workspace before building.

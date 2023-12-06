@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# * CI script for Linux and MacOS. Builds everything. To be called from the project root. To perform a clean build specify:
-# * ./scripts/ci.sh clean-build
+# * Builds everything for Linux and MacOS. To be called from the project root. To perform a clean build specify: clean-build
 
 # * Exit on first failure.
 set -e

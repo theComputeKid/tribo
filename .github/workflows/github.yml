@@ -6,14 +6,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: ./scripts/ci.sh
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latestrc
+          ninjaVersion: latest
+      - run: cmake --version
+      - run: ninja --version
   macos:
     runs-on: macos-latest
+
     steps:
       - uses: actions/checkout@v3
-      - run: ./scripts/ci.sh
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latestrc
+          ninjaVersion: latest
+      - run: cmake --version
+      - run: ninja --version
   windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      - run: .\\scripts\\ci.bat
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latestrc
+          ninjaVersion: latest
+      - run: cmake --version
+      - run: ninja --version
