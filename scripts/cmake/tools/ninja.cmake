@@ -9,6 +9,7 @@ ExternalProject_Add(
   BUILD_COMMAND ${CMAKE_COMMAND} --build . -j${TRIBO_NUM_CPU_CORES} --config Release
   CMAKE_ARGS
   -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+  -DBUILD_TESTING=OFF
 )
 
 # * Adds ninja path in case we need to build other tools using this ninja.

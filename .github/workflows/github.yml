@@ -1,0 +1,19 @@
+name: Build & Test - GitHub Runners
+run-name: ${{ github.actor }} - ${{ github.event.head_commit.message }}
+on: [push]
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: ./scripts/ci.sh
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: ./scripts/ci.sh
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: .\\scripts\\ci.bat
