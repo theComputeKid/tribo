@@ -15,5 +15,6 @@ cmake_host_system_information(
   QUERY NUMBER_OF_PHYSICAL_CORES
 )
 
-# * Build ninja.
+# * Build ninja first and then use it to build other things.
 include(${TRIBO_CMAKE_SCRIPTS_DIR}/tools/ninja.cmake)
+include(${TRIBO_CMAKE_SCRIPTS_DIR}/tools/cmake.cmake)
