@@ -7,8 +7,8 @@
 
 The following tools are needed to build the project:
 
-- cmake >= v3.28 (required)
-- ninja >= v1.11 (recommended)
+- cmake >= v3.28 [required]
+- ninja >= v1.11 [recommended]
 
 If an older version of cmake is present on the system, then a convenience script is provided that can download and build the latest version of cmake and ninja, though that script still requires a version of cmake >= 3.2 already on the system. To use the convenience script for Linux/MacOS, run this command from the project root directory:
 
@@ -19,7 +19,7 @@ If an older version of cmake is present on the system, then a convenience script
 To use the convenience script for Windows, run this command from the project root directory:
 
 ```
-./scripts/build-tools.bat
+.\scripts\build-tools.bat
 ```
 
 Once CMake and ninja have been built, the newly installed CMake can be invoked conveniently by another helper script. On Linux/MacOS:
@@ -31,11 +31,23 @@ Once CMake and ninja have been built, the newly installed CMake can be invoked c
 On Windows:
 
 ```
-./scripts/cmake.bat
+.\scripts\cmake.bat
 ```
 
 Note that the helper script redirects all arguments provided to it to the newly built CMake, so it should be used as if it was the CMake executable itself. For example:
 
 ```
 ./scripts/cmake.sh --workflow --list-presets
+```
+
+A helper script is provided for ci pipelines but this can also be used by developers. This will take a longer time, as it builds all the workflow presets used in development. To use this script, on Linux/MacOS, from the project root:
+
+```
+./scripts/ci.sh
+```
+
+On Windows, from the project root:
+
+```
+.\scripts\ci.bat
 ```
