@@ -5,31 +5,44 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: lukka/get-cmake@latest
         with:
           cmakeVersion: latestrc
           ninjaVersion: latest
+      - run: wget https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && sudo ./llvm.sh 17 all
       - run: cmake --version
       - run: ninja --version
+      - run: clang --version
+      - run: clang-17 --version
+      - run: g++-13 --version
   macos:
     runs-on: macos-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: lukka/get-cmake@latest
         with:
           cmakeVersion: latestrc
           ninjaVersion: latest
+      - run: brew update
+      - run: HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 HOMEBREW_NO_AUTO_UPDATE=1 brew install llvm@17
+      - run: echo "$(brew --prefix llvm@17)/bin" >> $GITHUB_PATH
       - run: cmake --version
       - run: ninja --version
+      - run: clang --version
   windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
       - uses: lukka/get-cmake@latest
         with:
           cmakeVersion: latestrc
           ninjaVersion: latest
+      - run: choco upgrade llvm --version=17.0.6
       - run: cmake --version
       - run: ninja --version
+      - run: cl.exe
+      - run: clang.exe --version
