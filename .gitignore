@@ -1,6 +1,7 @@
 #* IDE
 .vscode
 .vs
+compile_commands.json
 
 #* Build artifacts
 build
