@@ -1,10 +1,15 @@
 name: Build & Test - GitHub Runners
-run-name: ${{ github.actor }} - ${{ github.event.head_commit.message }}${{ github.event.pull_request.title }}
+run-name: ${{ github.actor }} - ${{ github.event.head_commit.message || github.event.pull_request.title }}
 on:
   push:
     branches:
       - main
   pull_request:
+
+#* Stop stale workflows when pull requests are updated: https://stackoverflow.com/a/70972844
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 jobs:
   linux:
     runs-on: ubuntu-latest
