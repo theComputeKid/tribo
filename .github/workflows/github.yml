@@ -1,5 +1,11 @@
+#* GitHub x64 cloud runners.
 name: Build & Test - GitHub Runners
+
+#* For a pull request, we use the PR title. After a push (probably to main), we use the commit title.
 run-name: ${{ github.actor }} - ${{ github.event.head_commit.message || github.event.pull_request.title }}
+
+#* To avoid duplicate jobs running when both push and PR is satisfied, we use this:
+#* https://github.com/orgs/community/discussions/26940#discussioncomment-5686753
 on:
   push:
     branches:
@@ -11,8 +17,11 @@ on:
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
-  linux:
+
+  #* Linux with clang.
+  linux-x64-clang:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +34,22 @@ jobs:
           version: "17"
           env: true
       - run: cmake --workflow --preset debug
+
+  #* Linux with GCC.
+  linux-x64-gcc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latestrc
+          ninjaVersion: latest
+      - run: cmake --workflow --preset debug
+        env:
+          CC: gcc-13
+          CXX: g++-13
+
+  #* MacOS with clang (from homebrew).
   macos:
     runs-on: macos-latest
     steps:
@@ -40,7 +65,9 @@ jobs:
         env:
           CC: clang
           CXX: clang++
-  windows:
+
+  #* Windows with MSVC.
+  windows-x64-msvc:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,8 +78,17 @@ jobs:
         with:
           cmakeVersion: latestrc
           ninjaVersion: latest
-      - run: choco upgrade llvm --version=17.0.6
+
+  #* Windows with clang (from chocolatey).
+  windows-x64-clang:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latestrc
+          ninjaVersion: latest
       - run: cmake --workflow --preset debug
-        env:
-          CC: clang
-          CXX: clang++
