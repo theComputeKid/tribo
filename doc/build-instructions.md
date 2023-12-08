@@ -7,10 +7,10 @@
 
 The following tools are needed to build the project:
 
-- cmake >= v3.28 [required]
-- ninja >= v1.11 [recommended]
+- cmake >= v3.28
+- ninja >= v1.11
 
-If an older version of cmake is present on the system, then a convenience script is provided that can download and build the latest version of cmake and ninja, though that script still requires a version of cmake >= 3.2 already on the system. To use the convenience script for Linux/MacOS, run this command from the project root directory:
+If an older version of cmake or ninja is present on the system, then a convenience script is provided that can download and build the latest version of cmake and ninja, though that script still requires a version of cmake >= 3.10 already on the system. To use the convenience script for Linux/MacOS, run this command from the project root directory:
 
 ```
 ./scripts/build-tools.sh
