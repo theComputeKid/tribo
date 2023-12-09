@@ -1,0 +1,45 @@
+{
+  "version": 8,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 28,
+    "patch": 0
+  },
+  "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+  "configurePresets": [
+    {
+      "name": "tools",
+      "description": "Configuration for building the build tools.",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${hostSystemName}/${presetName}/install",
+        "TRIBO_BUILD_TOOLS": "ON"
+      },
+      "binaryDir": "${sourceDir}/build/${hostSystemName}/${presetName}"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "tools",
+      "displayName": "Build tools for the bootstrap build.",
+      "configurePreset": "tools",
+      "configuration": "Release"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "tools",
+      "displayName": "Builds tools used for building the bootstrap project.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "tools"
+        },
+        {
+          "type": "build",
+          "name": "tools"
+        }
+      ]
+    }
+  ]
+}

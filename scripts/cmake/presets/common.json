@@ -1,0 +1,40 @@
+{
+  "version": 8,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 28,
+    "patch": 0
+  },
+  "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+  "configurePresets": [
+    {
+      "name": "common",
+      "hidden": true,
+      "generator": "Ninja Multi-Config",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${hostSystemName}/${presetName}/install"
+      },
+      "environment": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "PATH": "${sourceDir}/build/${hostSystemName}/tools/install/bin${pathListSep}$penv{PATH}"
+      },
+      "binaryDir": "${sourceDir}/build/${hostSystemName}/${presetName}"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "common",
+      "description": "Shared defaults for tests.",
+      "hidden": true,
+      "output": {
+        "outputOnFailure": true,
+        "shortProgress": true,
+        "labelSummary": true
+      },
+      "execution": {
+        "noTestsAction": "ignore",
+        "stopOnFailure": false
+      }
+    }
+  ]
+}

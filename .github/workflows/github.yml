@@ -20,8 +20,7 @@ concurrency:
 
 jobs:
 
-  #* Linux with clang.
-  linux-x64-clang:
+  linux-x64:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,24 +32,11 @@ jobs:
         with:
           version: "17"
           env: true
-      - run: cmake --workflow --preset debug
-
-  #* Linux with GCC.
-  linux-x64-gcc:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: latestrc
-          ninjaVersion: latest
-      - run: cmake --workflow --preset debug
-        env:
-          CC: gcc-13
-          CXX: g++-13
+      - run: cmake --workflow --preset clang-code-check
+      - run: cmake --workflow --preset gcc-code-check
 
   #* MacOS with clang (from homebrew).
-  macos:
+  macos-x64:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -64,27 +50,9 @@ jobs:
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
           HOMEBREW_NO_AUTO_UPDATE: 1
       - run: echo "$(brew --prefix llvm@17)/bin" >> $GITHUB_PATH
-      - run: cmake --workflow --preset debug
-        env:
-          CC: clang
-          CXX: clang++
+      - run: cmake --workflow --preset clang-code-check
 
-  #* Windows with MSVC.
-  windows-x64-msvc:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: TheMrMilchmann/setup-msvc-dev@v3
-        with:
-          arch: x64
-      - uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: latestrc
-          ninjaVersion: latest
-      - run: cmake --workflow --preset debug
-
-  #* Windows with clang (from chocolatey).
-  windows-x64-clang:
+  windows-x64:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -96,7 +64,6 @@ jobs:
           cmakeVersion: latestrc
           ninjaVersion: latest
       - run: choco upgrade llvm --version=17.0.6
-      - run: cmake --workflow --preset debug
-        env:
-          CC: clang
-          CXX: clang++
+      - run: cmake --workflow --preset clang-code-check
+      - run: cmake --workflow --preset clang-cl-code-check
+      - run: cmake --workflow --preset msvc-code-check
