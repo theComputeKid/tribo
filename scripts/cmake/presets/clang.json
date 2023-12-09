@@ -1,0 +1,123 @@
+{
+  "version": 8,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 28,
+    "patch": 0
+  },
+  "include": [
+    "common.json"
+  ],
+  "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+  "configurePresets": [
+    {
+      "name": "clang",
+      "inherits": "common",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "clang",
+      "displayName": "Builds with Ninja in release using clang.",
+      "configuration": "Release",
+      "configurePreset": "clang",
+      "targets": "install"
+    },
+    {
+      "name": "clang-debug",
+      "displayName": "Builds with Ninja in debug using clang.",
+      "configuration": "Debug",
+      "configurePreset": "clang",
+      "targets": "install"
+    },
+    {
+      "name": "clang-code-check",
+      "displayName": "Builds with Ninja with code-checking.",
+      "configuration": "CodeCheck",
+      "configurePreset": "clang"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "clang",
+      "displayName": "Runs tests in release using clang.",
+      "configuration": "Release",
+      "configurePreset": "clang",
+      "inherits": "common"
+    },
+    {
+      "name": "clang-debug",
+      "displayName": "Runs tests in debug using clang.",
+      "configuration": "Debug",
+      "configurePreset": "clang",
+      "inherits": "common"
+    },
+    {
+      "name": "clang-code-check",
+      "displayName": "Runs tests with code-checking using clang.",
+      "configuration": "CodeCheck",
+      "configurePreset": "clang",
+      "inherits": "common"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "clang",
+      "displayName": "Builds and tests project in release using clang.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang"
+        },
+        {
+          "type": "build",
+          "name": "clang"
+        },
+        {
+          "type": "test",
+          "name": "clang"
+        }
+      ]
+    },
+    {
+      "name": "clang-debug",
+      "displayName": "Builds and tests project in debug using clang.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang"
+        },
+        {
+          "type": "build",
+          "name": "clang-debug"
+        },
+        {
+          "type": "test",
+          "name": "clang-debug"
+        }
+      ]
+    },
+    {
+      "name": "clang-code-check",
+      "displayName": "Builds and tests project with code-checking using clang.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang"
+        },
+        {
+          "type": "build",
+          "name": "clang-code-check"
+        },
+        {
+          "type": "test",
+          "name": "clang-code-check"
+        }
+      ]
+    }
+  ]
+}

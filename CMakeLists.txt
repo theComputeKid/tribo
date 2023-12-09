@@ -18,6 +18,9 @@ endif(TRIBO_BUILD_TOOLS)
 # * FetchContent EXCLUDE_FROM_ALL.
 cmake_minimum_required(VERSION 3.28)
 
+# * Global project properties.
+include(${TRIBO_CMAKE_SCRIPTS_DIR}/project.cmake)
+
 project(
   tribosolver
   VERSION 0.0.1
