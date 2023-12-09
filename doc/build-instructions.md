@@ -37,19 +37,35 @@ On Windows:
 Note that the helper script redirects all arguments provided to it to the newly built CMake, so it should be used as if it was the CMake executable itself. For example:
 
 ```
-./scripts/cmake.sh --workflow --list-presets
+./scripts/cmake.sh --version
 ```
 
-A helper script is provided for developers to build all configurations. This will take a longer time, as it builds all the workflow presets used in development. To use this script, on Linux/MacOS, from the project root:
+### Build
+
+For a minimal release production build:
 
 ```
-./scripts/build-all.sh clean-build
+cmake --workflow --preset minimal
 ```
 
-On Windows, from the project root:
+### Development
+
+To list all the available CMake presets, including those used in development:
 
 ```
-.\scripts\build-all.bat clean-build
+cmake --workflow --list-presets
 ```
 
-The option `clean-build` additionally cleans the workspace before building.
+Three configurations are provided for every supported compiler:
+- Debug:
+  - Optimisations disabled.
+  - Debugging symbols enabled.
+- Release:
+  - Optimisations enabled.
+  - Debugging symbols disabled.
+- CodeCheck:
+  - Optimisations disabled.
+  - Debugging symbols enabled.
+  - Address sanitisation enabled.
+  - Static analysis checks enabled.
+Tests are built with all development configurations..
