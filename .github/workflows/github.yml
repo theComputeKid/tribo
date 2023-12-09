@@ -20,29 +20,41 @@ concurrency:
 
 jobs:
 
-  linux-x64:
+  linux-x64-clang:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: lukka/get-cmake@latest
         with:
-          cmakeVersion: latestrc
+          cmakeVersion: latest
           ninjaVersion: latest
       - uses: KyleMayes/install-llvm-action@v1
         with:
           version: "17"
           env: true
       - run: cmake --workflow --preset clang-code-check
+
+  linux-x64-gcc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
+      - uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "17"
+          env: true
       - run: cmake --workflow --preset gcc-code-check
 
-  #* MacOS with clang (from homebrew).
-  macos-x64:
+  macos-x64-clang:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       - uses: lukka/get-cmake@latest
         with:
-          cmakeVersion: latestrc
+          cmakeVersion: latest
           ninjaVersion: latest
       - run: brew update
       - run: brew install llvm@17
@@ -52,7 +64,7 @@ jobs:
       - run: echo "$(brew --prefix llvm@17)/bin" >> $GITHUB_PATH
       - run: cmake --workflow --preset clang-code-check
 
-  windows-x64:
+  windows-x64-clang:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -61,9 +73,35 @@ jobs:
           arch: x64
       - uses: lukka/get-cmake@latest
         with:
-          cmakeVersion: latestrc
+          cmakeVersion: latest
           ninjaVersion: latest
       - run: choco upgrade llvm --version=17.0.6
       - run: cmake --workflow --preset clang-code-check
+
+  windows-x64-clang-cl:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
+      - run: choco upgrade llvm --version=17.0.6
       - run: cmake --workflow --preset clang-cl-code-check
+
+  windows-x64-msvc:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
+      - run: choco upgrade llvm --version=17.0.6
       - run: cmake --workflow --preset msvc-code-check
