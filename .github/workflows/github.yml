@@ -59,7 +59,10 @@ jobs:
           cmakeVersion: latestrc
           ninjaVersion: latest
       - run: brew update
-      - run: HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 HOMEBREW_NO_AUTO_UPDATE=1 brew install llvm@17
+      - run: brew install llvm@17
+        env:
+          HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
+          HOMEBREW_NO_AUTO_UPDATE: 1
       - run: echo "$(brew --prefix llvm@17)/bin" >> $GITHUB_PATH
       - run: cmake --workflow --preset debug
         env:
@@ -78,6 +81,7 @@ jobs:
         with:
           cmakeVersion: latestrc
           ninjaVersion: latest
+      - run: cmake --workflow --preset debug
 
   #* Windows with clang (from chocolatey).
   windows-x64-clang:
@@ -91,4 +95,8 @@ jobs:
         with:
           cmakeVersion: latestrc
           ninjaVersion: latest
+      - run: choco upgrade llvm --version=17.0.6
       - run: cmake --workflow --preset debug
+        env:
+          CC: clang
+          CXX: clang++
