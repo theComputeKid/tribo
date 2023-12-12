@@ -59,6 +59,9 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE: 1
       - run: echo "$(brew --prefix llvm@17)/bin" >> $GITHUB_PATH
       - run: cmake --workflow --preset clang-code-check
+        env:
+          LDFLAGS: "-L$(brew --prefix llvm@17)/lib/c++ -Wl,-rpath,$(brew --prefix llvm@17)/lib/c++ -L$(brew --prefix llvm@17)/lib"
+          CPPFLAGS: "-I$(brew --prefix llvm@17)/include"
 
   windows-x64-clang:
     runs-on: windows-latest
