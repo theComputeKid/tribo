@@ -1,5 +1,6 @@
 WarningsAsErrors: "*"
 FormatStyle: "file"
+
 Checks: "*,
   -altera-*,
   -fuchsia-*,

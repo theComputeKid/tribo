@@ -42,10 +42,6 @@ jobs:
         with:
           cmakeVersion: latest
           ninjaVersion: latest
-      - uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: "17"
-          env: true
       - run: cmake --workflow --preset gcc-code-check
 
   macos-x64-clang:
@@ -103,5 +99,4 @@ jobs:
         with:
           cmakeVersion: latest
           ninjaVersion: latest
-      - run: choco upgrade llvm --version=17.0.6
       - run: cmake --workflow --preset msvc-code-check

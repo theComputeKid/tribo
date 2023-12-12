@@ -12,7 +12,9 @@
       "hidden": true,
       "generator": "Ninja Multi-Config",
       "cacheVariables": {
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${hostSystemName}/${presetName}/install"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${hostSystemName}/${presetName}/install",
+        "FETCHCONTENT_UPDATES_DISCONNECTED": "ON",
+        "TRIBO_ENABLE_TESTS": "ON"
       },
       "environment": {
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
@@ -32,7 +34,7 @@
         "labelSummary": true
       },
       "execution": {
-        "noTestsAction": "ignore",
+        "noTestsAction": "error",
         "stopOnFailure": false
       }
     }

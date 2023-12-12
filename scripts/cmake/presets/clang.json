@@ -38,7 +38,8 @@
       "name": "clang-code-check",
       "displayName": "Builds with Ninja with code-checking.",
       "configuration": "CodeCheck",
-      "configurePreset": "clang"
+      "configurePreset": "clang",
+      "targets": "install"
     }
   ],
   "testPresets": [

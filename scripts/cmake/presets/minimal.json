@@ -12,7 +12,6 @@
       "generator": "Ninja",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_MAKE_PROGRAM": "${sourceDir}/build/${hostSystemName}/tools/install/bin/ninja",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${hostSystemName}/${presetName}/install",
         "FETCHCONTENT_UPDATES_DISCONNECTED": "ON",
         "TRIBO_DISABLE_WARNINGS": "ON"

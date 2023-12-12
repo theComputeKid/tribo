@@ -1,0 +1,22 @@
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+  set(TRIBO_NO_WARN_FLAG /w)
+  set(TRIBO_ASAN_COMPILE_FLAG /fsanitize=address)
+  set(TRIBO_STANDARD_WARNINGS /W4 /WX /EHsc)
+else()
+  set(TRIBO_NO_WARN_FLAG -w)
+  set(TRIBO_STANDARD_WARNINGS -Werror -Wall -Wextra -Wpedantic)
+  set(TRIBO_ASAN_COMPILE_FLAG -fsanitize=address -fno-omit-frame-pointer)
+  set(TRIBO_ASAN_LINK_FLAG -fsanitize=address)
+endif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+
+# * Set the warnings.
+if(TRIBO_DISABLE_WARNINGS)
+  set(TRIBO_WARNING_FLAGS ${TRIBO_NO_WARN_FLAG})
+else()
+  set(TRIBO_WARNING_FLAGS ${TRIBO_STANDARD_WARNINGS})
+endif(TRIBO_DISABLE_WARNINGS)
+
+list(APPEND CMAKE_INSTALL_RPATH "@loader_path/../lib")

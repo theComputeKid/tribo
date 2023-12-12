@@ -1,0 +1,5 @@
+InheritParentConfig: true
+Checks: "-modernize-use-using,
+  -modernize-deprecated-headers,
+  -hicpp-deprecated-headers,
+  -modernize-use-trailing-return-type"
