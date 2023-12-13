@@ -18,11 +18,14 @@ set_target_properties(
   COMPILE_DEFINITIONS TRIBO_PROJECT_VERSION_MAJOR=${TRIBO_PROJECT_VERSION_MAJOR}$<SEMICOLON>TRIBO_PROJECT_VERSION_MINOR=${TRIBO_PROJECT_VERSION_MINOR}$<SEMICOLON>TRIBO_PROJECT_VERSION_PATCH=${TRIBO_PROJECT_VERSION_PATCH}$<SEMICOLON>TRIBO_GIT_COMMIT_HASH=\"${TRIBO_GIT_COMMIT_HASH}\"
 )
 
-target_precompile_headers(
-  ${myTargetName}
-  PRIVATE
-  pch.hpp
-)
+# * PCH CMake bug.
+if(NOT TRIBO_CLANG_CL)
+  target_precompile_headers(
+    ${myTargetName}
+    PRIVATE
+    pch.hpp
+  )
+endif(NOT TRIBO_CLANG_CL)
 
 # * CMake's clang-tidy integration cannot handle PCH. So we filter it out.
 # * There is no elegant way of finding the CXX file that CMake auto-generates for the PCH.

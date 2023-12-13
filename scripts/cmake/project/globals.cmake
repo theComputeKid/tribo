@@ -6,7 +6,7 @@ set(
   CACHE STRING "Allowed project configurations" FORCE
 )
 
-# * So windows exe can find DLL.
+# * So windows exe can find DLL: https://stackoverflow.com/a/55886605
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(FETCHCONTENT_QUIET FALSE)

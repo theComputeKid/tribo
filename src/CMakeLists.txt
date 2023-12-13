@@ -31,11 +31,14 @@ target_compile_options(
   ${TRIBO_WARNING_FLAGS}
 )
 
-target_precompile_headers(
-  ${myTargetName}
-  PRIVATE
-  pch.h
-)
+# * PCH CMake bug.
+if(NOT TRIBO_CLANG_CL)
+  target_precompile_headers(
+    ${myTargetName}
+    PRIVATE
+    $<$<COMPILE_LANGUAGE:C>:${CMAKE_CURRENT_SOURCE_DIR}/pch.h>
+  )
+endif(NOT TRIBO_CLANG_CL)
 
 # * CMake's clang-tidy integration cannot handle PCH. So we filter it out.
 # * There is no elegant way of finding the CXX file that CMake auto-generates for the PCH.
