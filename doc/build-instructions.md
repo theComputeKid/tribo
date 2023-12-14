@@ -48,6 +48,8 @@ For a minimal release production build:
 cmake --workflow --preset minimal
 ```
 
+This also generates [documentation](#api-documentation) if doxygen is present on the build system.
+
 ### Development
 
 To list all the available CMake presets, including those used in development:
@@ -68,4 +70,9 @@ Three configurations are provided for every supported compiler:
   - Debugging symbols enabled.
   - Address sanitisation enabled.
   - Static analysis checks enabled.
-Tests are built with all development configurations..
+
+[Documentation](#api-documentation) and tests are built with all development configurations.
+
+### API documentation
+
+If doxygen is present on the build system, then documentation for the project API is automatically generated [`build/html/index.html`](build/html/index.html). However, this is not checked in to the repository and the project must be built for it to happen.
