@@ -37,8 +37,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: brew update
-      - name: Install LLVM-17 and ninja
-        run: brew install llvm@17 ninja
+      - name: Install CMake, LLVM-17 and ninja
+        run: brew install cmake llvm@17 ninja
         env:
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
           HOMEBREW_NO_AUTO_UPDATE: 1
@@ -57,8 +57,8 @@ jobs:
       - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
           arch: x64
-      - name: Install LLVM-17 and ninja
-        run: choco upgrade ninja llvm --version=17.0.6
+      - name: Install CMake, LLVM-17 and ninja
+        run: choco upgrade cmake ninja llvm --version=17.0.6
       - name: Build project (clang-code-check)
         run: cmake --workflow --preset clang-code-check
 
@@ -69,8 +69,8 @@ jobs:
       - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
           arch: x64
-      - name: Install LLVM-17 and ninja
-        run: choco upgrade ninja llvm --version=17.0.6
+      - name: Install CMake, LLVM-17 and ninja
+        run: choco upgrade cmake ninja llvm --version=17.0.6
       - name: Build project (clang-cl-code-check)
         run: cmake --workflow --preset clang-cl-code-check
 
@@ -81,7 +81,7 @@ jobs:
       - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
           arch: x64
-      - name: Install ninja
-        run: choco upgrade ninja
+      - name: Install CMake and ninja
+        run: choco upgrade cmake ninja
       - name: Build project (msvc-code-check)
         run: cmake --workflow --preset msvc-code-check
