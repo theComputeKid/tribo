@@ -24,29 +24,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install llvm@17 ninja
+      - name: Install LLVM-17 and ninja
+        run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install llvm@17 ninja
         env:
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
           HOMEBREW_NO_AUTO_UPDATE: 1
-      # - run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && echo "$(brew --prefix llvm@17)/bin" >> $GITHUB_PATH
-      # - run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && echo "$(brew --prefix ninja)/bin" >> $GITHUB_PATH
-      - run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && cmake --workflow --preset clang-code-check
+      - name: Build project (clang-code-check)
+        run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && cmake --workflow --preset clang-code-check
 
   macos-x64-clang:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: latest
-          ninjaVersion: latest
       - run: brew update
-      - run: brew install llvm@17
+      - name: Install LLVM-17 and ninja
+        run: brew install llvm@17 ninja
         env:
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
           HOMEBREW_NO_AUTO_UPDATE: 1
-      - run: echo "$(brew --prefix llvm@17)/bin" >> $GITHUB_PATH
-      - run: cmake --workflow --preset clang-code-check
+      - name: Add LLVM-17 to path over system clang
+        run: echo "$(brew --prefix llvm@17)/bin" >> $GITHUB_PATH
+      - name: Build project (clang-code-check)
+        run: cmake --workflow --preset clang-code-check
         env:
           LDFLAGS: "-L$(brew --prefix llvm@17)/lib/c++ -Wl,-rpath,$(brew --prefix llvm@17)/lib/c++ -L$(brew --prefix llvm@17)/lib"
           CPPFLAGS: "-I$(brew --prefix llvm@17)/include"
@@ -58,12 +57,10 @@ jobs:
       - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
           arch: x64
-      - uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: latest
-          ninjaVersion: latest
-      - run: choco upgrade llvm --version=17.0.6
-      - run: cmake --workflow --preset clang-code-check
+      - name: Install LLVM-17 and ninja
+        run: choco upgrade ninja llvm --version=17.0.6
+      - name: Build project (clang-code-check)
+        run: cmake --workflow --preset clang-code-check
 
   windows-x64-clang-cl:
     runs-on: windows-latest
@@ -72,12 +69,10 @@ jobs:
       - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
           arch: x64
-      - uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: latest
-          ninjaVersion: latest
-      - run: choco upgrade llvm --version=17.0.6
-      - run: cmake --workflow --preset clang-cl-code-check
+      - name: Install LLVM-17 and ninja
+        run: choco upgrade ninja llvm --version=17.0.6
+      - name: Build project (clang-cl-code-check)
+        run: cmake --workflow --preset clang-cl-code-check
 
   windows-x64-msvc:
     runs-on: windows-latest
@@ -86,8 +81,7 @@ jobs:
       - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
           arch: x64
-      - uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: latest
-          ninjaVersion: latest
-      - run: cmake --workflow --preset msvc-code-check
+      - name: Install ninja
+        run: choco upgrade ninja
+      - name: Build project (msvc-code-check)
+        run: cmake --workflow --preset msvc-code-check
