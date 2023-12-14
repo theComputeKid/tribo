@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-      - run: brew install llvm@17 ninja
+      - run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install llvm@17 ninja
         env:
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
           HOMEBREW_NO_AUTO_UPDATE: 1
