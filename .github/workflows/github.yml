@@ -24,13 +24,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
       - run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install llvm@17 ninja
         env:
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
           HOMEBREW_NO_AUTO_UPDATE: 1
-      - run: echo "$(brew --prefix llvm@17)/bin" >> $GITHUB_PATH
-      - run: cmake --workflow --preset clang-code-check
+      # - run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && echo "$(brew --prefix llvm@17)/bin" >> $GITHUB_PATH
+      # - run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && echo "$(brew --prefix ninja)/bin" >> $GITHUB_PATH
+      - run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && cmake --workflow --preset clang-code-check
 
   macos-x64-clang:
     runs-on: macos-latest
