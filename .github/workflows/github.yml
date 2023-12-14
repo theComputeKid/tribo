@@ -24,8 +24,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install LLVM-17 and ninja
-        run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install llvm@17 ninja
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
+      - name: Install LLVM-17
+        run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install llvm@17
         env:
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
           HOMEBREW_NO_AUTO_UPDATE: 1
@@ -36,9 +40,13 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
       - run: brew update
-      - name: Install CMake, LLVM-17 and ninja
-        run: brew install cmake llvm@17 ninja
+      - name: Install LLVM-17
+        run: brew install llvm@17
         env:
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
           HOMEBREW_NO_AUTO_UPDATE: 1
@@ -57,10 +65,12 @@ jobs:
       - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
           arch: x64
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
       - name: Install LLVM-17
         run: choco upgrade llvm --version=17.0.6
-      - name: Install CMake and ninja
-        run: choco upgrade cmake ninja
       - name: Build project (clang-code-check)
         run: cmake --workflow --preset clang-code-check
 
@@ -71,10 +81,12 @@ jobs:
       - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
           arch: x64
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
       - name: Install LLVM-17
         run: choco upgrade llvm --version=17.0.6
-      - name: Install CMake and ninja
-        run: choco upgrade cmake ninja
       - name: Build project (clang-cl-code-check)
         run: cmake --workflow --preset clang-cl-code-check
 
@@ -85,7 +97,9 @@ jobs:
       - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
           arch: x64
-      - name: Install CMake and ninja
-        run: choco upgrade cmake ninja
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
       - name: Build project (msvc-code-check)
         run: cmake --workflow --preset msvc-code-check
