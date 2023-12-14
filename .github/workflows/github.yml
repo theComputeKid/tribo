@@ -57,8 +57,10 @@ jobs:
       - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
           arch: x64
-      - name: Install CMake, LLVM-17 and ninja
-        run: choco upgrade cmake ninja llvm --version=17.0.6
+      - name: Install LLVM-17
+        run: choco upgrade llvm --version=17.0.6
+      - name: Install CMake and ninja
+        run: choco upgrade cmake ninja
       - name: Build project (clang-code-check)
         run: cmake --workflow --preset clang-code-check
 
@@ -69,8 +71,10 @@ jobs:
       - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
           arch: x64
-      - name: Install CMake, LLVM-17 and ninja
-        run: choco upgrade cmake ninja llvm --version=17.0.6
+      - name: Install LLVM-17
+        run: choco upgrade llvm --version=17.0.6
+      - name: Install CMake and ninja
+        run: choco upgrade cmake ninja
       - name: Build project (clang-cl-code-check)
         run: cmake --workflow --preset clang-cl-code-check
 
