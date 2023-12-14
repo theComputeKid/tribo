@@ -18,11 +18,21 @@ endif(TRIBO_BUILD_TOOLS)
 # * FetchContent EXCLUDE_FROM_ALL.
 cmake_minimum_required(VERSION 3.28)
 
-# * Global project properties.
-include(${TRIBO_CMAKE_SCRIPTS_DIR}/project.cmake)
-
 project(
-  tribosolver
+  tribo
   VERSION 0.0.1
   DESCRIPTION "a point contact lubrication solver"
+  LANGUAGES C CXX
 )
+
+# * Global project properties.
+include(${TRIBO_CMAKE_SCRIPTS_DIR}/project.cmake)
+include(${TRIBO_CMAKE_SCRIPTS_DIR}/3p.cmake)
+
+# * Extra project rules.
+include(${TRIBO_CMAKE_SCRIPTS_DIR}/rules.cmake)
+add_subdirectory(src)
+
+if(TRIBO_ENABLE_TESTS)
+  add_subdirectory(test)
+endif(TRIBO_ENABLE_TESTS)
