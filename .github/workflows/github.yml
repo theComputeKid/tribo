@@ -28,8 +28,11 @@ jobs:
         with:
           cmakeVersion: latest
           ninjaVersion: latest
-      - name: Install LLVM-17
-        run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install llvm@17
+      - uses: ssciwr/doxygen-install@v1
+        with:
+          version: "1.9.8"
+      - name: Install LLVM-17 and doxygen
+        run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install llvm@17 doxygen
         env:
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
           HOMEBREW_NO_AUTO_UPDATE: 1
@@ -44,6 +47,9 @@ jobs:
         with:
           cmakeVersion: latest
           ninjaVersion: latest
+      - uses: ssciwr/doxygen-install@v1
+        with:
+          version: "1.9.8"
       - run: brew update
       - name: Install LLVM-17
         run: brew install llvm@17
@@ -69,6 +75,9 @@ jobs:
         with:
           cmakeVersion: latest
           ninjaVersion: latest
+      - uses: ssciwr/doxygen-install@v1
+        with:
+          version: "1.9.8"
       - name: Install LLVM-17
         run: choco upgrade llvm --version=17.0.6
       - name: Build project (clang-code-check)
@@ -85,6 +94,9 @@ jobs:
         with:
           cmakeVersion: latest
           ninjaVersion: latest
+      - uses: ssciwr/doxygen-install@v1
+        with:
+          version: "1.9.8"
       - name: Install LLVM-17
         run: choco upgrade llvm --version=17.0.6
       - name: Build project (clang-cl-code-check)
@@ -101,5 +113,8 @@ jobs:
         with:
           cmakeVersion: latest
           ninjaVersion: latest
+      - uses: ssciwr/doxygen-install@v1
+        with:
+          version: "1.9.8"
       - name: Build project (msvc-code-check)
         run: cmake --workflow --preset msvc-code-check
