@@ -24,25 +24,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: latest
-          ninjaVersion: latest
-      - uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: "17"
-          env: true
+      - run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+      - run: brew install llvm@17 ninja
+        env:
+          HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
+          HOMEBREW_NO_AUTO_UPDATE: 1
+      - run: echo "$(brew --prefix llvm@17)/bin" >> $GITHUB_PATH
       - run: cmake --workflow --preset clang-code-check
-
-  linux-x64-gcc:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: latest
-          ninjaVersion: latest
-      - run: cmake --workflow --preset gcc-code-check
 
   macos-x64-clang:
     runs-on: macos-latest

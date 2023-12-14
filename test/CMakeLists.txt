@@ -25,12 +25,12 @@ if(NOT TRIBO_CLANG_CL)
     PRIVATE
     pch.hpp
   )
-endif(NOT TRIBO_CLANG_CL)
 
-# * CMake's clang-tidy integration cannot handle PCH. So we filter it out.
-# * There is no elegant way of finding the CXX file that CMake auto-generates for the PCH.
-file(GLOB_RECURSE PCH_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${myTargetName}.dir/*.cxx)
-set_source_files_properties(${PCH_FILES} PROPERTIES SKIP_LINTING ON)
+  # * CMake's clang-tidy integration cannot handle PCH. So we filter it out.
+  # * There is no elegant way of finding the CXX file that CMake auto-generates for the PCH.
+  file(GLOB_RECURSE PCH_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${myTargetName}.dir/*.cxx)
+  set_source_files_properties(${PCH_FILES} PROPERTIES SKIP_LINTING ON)
+endif(NOT TRIBO_CLANG_CL)
 
 target_compile_options(
   ${myTargetName}
