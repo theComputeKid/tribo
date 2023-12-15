@@ -1,8 +1,11 @@
-#* IDE
+# * IDE
 .cache
 .vscode
 .vs
 compile_commands.json
 
-#* Build artifacts
+# * Build artifacts
 build
+
+# * CMake
+CMakeUserPresets.json

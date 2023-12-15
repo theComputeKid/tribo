@@ -1,3 +1,17 @@
+# * Unset anything CMake might be doing.
+# * CXX
+set(CMAKE_CXX_FLAGS "")
+set(CMAKE_CXX_FLAGS_DEBUG "")
+set(CMAKE_CXX_FLAGS_RELEASE "")
+set(CMAKE_CXX_FLAGS_CODECHECK "")
+
+# * C
+set(CMAKE_C_FLAGS "")
+set(CMAKE_C_FLAGS_DEBUG "")
+set(CMAKE_C_FLAGS_RELEASE "")
+set(CMAKE_C_FLAGS_CODECHECK "")
+
+# * Hide symbol visibility.
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
@@ -7,26 +21,112 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_FRONTEND_VARIAN
 endif()
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC" OR TRIBO_CLANG_CL)
+  # * Warnings
   set(TRIBO_NO_WARN_FLAG /w)
-  set(TRIBO_ASAN_COMPILE_FLAG /fsanitize=address)
-  set(TRIBO_STANDARD_WARNINGS /W4 /WX /EHsc)
+  set(TRIBO_STANDARD_WARNINGS /W4 /WX)
+
+  # * Exceptions for C++.
+  list(APPEND CMAKE_CXX_FLAGS /EHsc)
+
+  # * Debug compilation flags
+  list(APPEND CMAKE_CXX_FLAGS_DEBUG /Od /DEBUG /Z7)
+  list(APPEND CMAKE_C_FLAGS_DEBUG /Od /DEBUG /Z7)
+  list(APPEND CMAKE_CXX_FLAGS_CODECHECK ${CMAKE_CXX_FLAGS_DEBUG})
+  list(APPEND CMAKE_C_FLAGS_CODECHECK ${CMAKE_C_FLAGS_DEBUG})
+
+  if(TRIBO_CLANG_CL)
+    # * Clang-cl flags on windows.
+    # * TODO: Enable sanitizers for clang-cl.
+    list(APPEND CMAKE_CXX_FLAGS_RELEASE /03)
+    list(APPEND CMAKE_C_FLAGS_RELEASE /03)
+    set(TRIBO_CODE_COVERAGE_COMPILER_FLAG --coverage)
+    set(TRIBO_CODE_COVERAGE_LINKER_FLAG clang_rt.profile-x86_64.lib)
+  else()
+    # * MSVC
+    # * TODO: Enable code coverage for msvc.
+    set(TRIBO_ASAN_COMPILER_FLAG /fsanitize=address)
+    set(TRIBO_ASAN_LINKER_FLAG /fsanitize=address)
+    list(APPEND CMAKE_CXX_FLAGS_RELEASE /02)
+    list(APPEND CMAKE_C_FLAGS_RELEASE /02)
+  endif()
 else()
+  # * Clang or GNU on either windows or unix.
+  # * Warnings.
   set(TRIBO_NO_WARN_FLAG -w)
   set(TRIBO_STANDARD_WARNINGS -Werror -Wall -Wextra -Wpedantic -Wdocumentation)
-  set(TRIBO_ASAN_COMPILE_FLAG -fsanitize=address -fno-omit-frame-pointer)
-  set(TRIBO_ASAN_LINK_FLAG -fsanitize=address)
+
+  if(NOT WIN32)
+    # * Clang/GNU on Unix.
+    # * TODO: Enable sanitizers for clang on Windows.
+    set(TRIBO_ASAN_COMPILER_FLAG -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined)
+    set(TRIBO_ASAN_LINKER_FLAG -fsanitize=address -fsanitize=undefined)
+  endif()
+
+  # * Code coverage.
+  set(TRIBO_CODE_COVERAGE_COMPILER_FLAG --coverage)
+  set(TRIBO_CODE_COVERAGE_LINKER_FLAG --coverage)
+
+  # * Debug flags.
+  list(APPEND CMAKE_CXX_FLAGS_DEBUG -g -O0)
+  list(APPEND CMAKE_C_FLAGS_DEBUG -g -O0)
+  list(APPEND CMAKE_CXX_FLAGS_CODECHECK ${CMAKE_CXX_FLAGS_DEBUG})
+  list(APPEND CMAKE_C_FLAGS_CODECHECK ${CMAKE_C_FLAGS_DEBUG})
+
+  # * Release
+  list(APPEND CMAKE_CXX_FLAGS_RELEASE -O3)
+  list(APPEND CMAKE_C_FLAGS_RELEASE -O3)
+
+  # * If we want to link with libc++
+  set(TRIBO_LIBCXX_COMPILER_FLAG -stdlib=libc++)
+  set(TRIBO_LIBCXX_LINKER_FLAG -stdlib=libc++ -lc++ -lc++abi -lm)
 endif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC" OR TRIBO_CLANG_CL)
 
 # * Set the warnings.
-if(TRIBO_DISABLE_WARNINGS)
-  set(TRIBO_WARNING_FLAGS ${TRIBO_NO_WARN_FLAG})
+if(TRIBO_ENABLE_WARNINGS)
+  list(APPEND CMAKE_CXX_FLAGS ${TRIBO_STANDARD_WARNINGS})
+  list(APPEND CMAKE_C_FLAGS ${TRIBO_STANDARD_WARNINGS})
 else()
-  set(TRIBO_WARNING_FLAGS ${TRIBO_STANDARD_WARNINGS})
-endif(TRIBO_DISABLE_WARNINGS)
+  list(APPEND CMAKE_CXX_FLAGS ${TRIBO_NO_WARN_FLAG})
+  list(APPEND CMAKE_C_FLAGS ${TRIBO_NO_WARN_FLAG})
+endif(TRIBO_ENABLE_WARNINGS)
 
-# * Use libc++ on linux with clang (already the default on MacOS so do not need to add it)
-if(UNIX AND NOT APPLE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  set(CMAKE_CXX_FLAGS "-stdlib=libc++ ${CMAKE_CXX_FLAGS}")
-  set(CMAKE_EXE_LINKER_FLAGS "-stdlib=libc++ -lc++ -lc++abi -lm ${CMAKE_EXE_LINKER_FLAGS}")
-  set(CMAKE_SHARED_LINKER_FLAGS "-stdlib=libc++ -lc++ -lc++abi -lm ${CMAKE_SHARED_LINKER_FLAGS}")
+if(TRIBO_CODECHECK_ENABLE_CODECOVERAGE)
+  list(APPEND CMAKE_CXX_FLAGS_CODECHECK ${TRIBO_CODE_COVERAGE_COMPILER_FLAG})
+  list(APPEND CMAKE_C_FLAGS_CODECHECK ${TRIBO_CODE_COVERAGE_COMPILER_FLAG})
+  list(APPEND CMAKE_SHARED_LINKER_FLAGS ${TRIBO_CODE_COVERAGE_LINKER_FLAG})
+  list(APPEND CMAKE_EXE_LINKER_FLAGS ${TRIBO_CODE_COVERAGE_LINKER_FLAG})
 endif()
+
+if(TRIBO_CODECHECK_ENABLE_SANITIZERS)
+  list(APPEND CMAKE_CXX_FLAGS_CODECHECK ${TRIBO_ASAN_COMPILER_FLAG})
+  list(APPEND CMAKE_C_FLAGS_CODECHECK ${TRIBO_ASAN_COMPILER_FLAG})
+  list(APPEND CMAKE_SHARED_LINKER_FLAGS ${TRIBO_ASAN_LINKER_FLAG})
+  list(APPEND CMAKE_EXE_LINKER_FLAGS ${TRIBO_ASAN_LINKER_FLAG})
+endif()
+
+# * Use libc++ on linux project-wide with clang (already the default on MacOS so do not need to add it).
+if(UNIX AND NOT APPLE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  list(APPEND CMAKE_CXX_FLAGS ${TRIBO_LIBCXX_COMPILER_FLAG})
+  list(APPEND CMAKE_EXE_LINKER_FLAGS ${TRIBO_LIBCXX_LINKER_FLAG})
+endif()
+
+# # * Un-semicolon everything, otherwise cmake will add a list. CMake nonsense.
+# * CXX
+string(REPLACE ";" " " CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+string(REPLACE ";" " " CMAKE_CXX_FLAGS_CODECHECK "${CMAKE_CXX_FLAGS_CODECHECK}")
+string(REPLACE ";" " " CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+string(REPLACE ";" " " CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+
+# * C
+string(REPLACE ";" " " CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+string(REPLACE ";" " " CMAKE_C_FLAGS_CODECHECK "${CMAKE_C_FLAGS_CODECHECK}")
+string(REPLACE ";" " " CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+string(REPLACE ";" " " CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
+
+# * Link
+string(REPLACE ";" " " CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+string(REPLACE ";" " " CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+
+# * Other stuff
+string(REPLACE ";" " " TRIBO_STANDARD_WARNINGS "${TRIBO_STANDARD_WARNINGS}")
+string(REPLACE ";" " " TRIBO_CODE_COVERAGE_COMPILER_FLAG "${TRIBO_CODE_COVERAGE_COMPILER_FLAG}")

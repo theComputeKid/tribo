@@ -25,25 +25,7 @@ set_target_properties(
   PUBLIC_HEADER ${TRIBO_EXPORT_HEADER_DIR}/tribo.h
 )
 
-target_compile_options(
-  ${myTargetName}
-  PRIVATE
-  ${TRIBO_WARNING_FLAGS}
-)
-
-# * PCH CMake bug.
-if(NOT TRIBO_CLANG_CL)
-  target_precompile_headers(
-    ${myTargetName}
-    PRIVATE
-    $<$<COMPILE_LANGUAGE:C>:${CMAKE_CURRENT_SOURCE_DIR}/pch.h>
-  )
-
-  # * CMake's clang-tidy integration cannot handle PCH. So we filter it out.
-  # * There is no elegant way of finding the CXX file that CMake auto-generates for the PCH.
-  file(GLOB_RECURSE PCH_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${myTargetName}.dir/*.c*)
-  set_source_files_properties(${PCH_FILES} PROPERTIES SKIP_LINTING ON)
-endif(NOT TRIBO_CLANG_CL)
+include(${TRIBO_CMAKE_SCRIPTS_DIR}/pch.cmake)
 
 target_include_directories(${myTargetName} PUBLIC ${TRIBO_EXPORT_HEADER_DIR})
 

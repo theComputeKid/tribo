@@ -12,9 +12,7 @@
       "generator": "Ninja",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${hostSystemName}/${presetName}/install",
-        "FETCHCONTENT_UPDATES_DISCONNECTED": "ON",
-        "TRIBO_DISABLE_WARNINGS": "ON"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${hostSystemName}/${presetName}/install"
       },
       "binaryDir": "${sourceDir}/build/${hostSystemName}/${presetName}"
     }
