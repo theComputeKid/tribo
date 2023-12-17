@@ -1,7 +1,8 @@
 # * Sets Google Test usage.
 enable_testing()
 
-include(GoogleTest)
+set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_Declare(
   googletest
@@ -12,6 +13,6 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE
   EXCLUDE_FROM_ALL
 )
-set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
+
+include(GoogleTest)

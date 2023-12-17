@@ -3,3 +3,4 @@
 include(${TRIBO_CMAKE_SCRIPTS_DIR}/rules/compile-commands.cmake)
 include(${TRIBO_CMAKE_SCRIPTS_DIR}/rules/clang-tidy.cmake)
 include(${TRIBO_CMAKE_SCRIPTS_DIR}/rules/doxygen.cmake)
+include(${TRIBO_CMAKE_SCRIPTS_DIR}/rules/coverage.cmake)

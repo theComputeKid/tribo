@@ -14,7 +14,9 @@
       "cacheVariables": {
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${hostSystemName}/${presetName}/install",
         "FETCHCONTENT_UPDATES_DISCONNECTED": "ON",
-        "TRIBO_ENABLE_TESTS": "ON"
+        "FETCHCONTENT_QUIET": "OFF",
+        "TRIBO_ENABLE_TESTS": "ON",
+        "TRIBO_ENABLE_WARNINGS": "ON"
       },
       "environment": {
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
