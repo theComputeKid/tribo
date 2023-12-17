@@ -16,7 +16,8 @@
         "FETCHCONTENT_UPDATES_DISCONNECTED": "ON",
         "FETCHCONTENT_QUIET": "OFF",
         "TRIBO_ENABLE_TESTS": "ON",
-        "TRIBO_ENABLE_WARNINGS": "ON"
+        "TRIBO_ENABLE_WARNINGS": "ON",
+        "TRIBO_USE_PCH": "ON"
       },
       "environment": {
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",

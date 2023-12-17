@@ -3,7 +3,6 @@
  *
  * @copyright Copyright (c) 2023 theComputeKid
  */
-// #include "tribo/c/info.h"
 #include <gtest/gtest.h>
 #include <tribo.h>
 

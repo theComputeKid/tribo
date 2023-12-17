@@ -15,8 +15,7 @@
       "inherits": "common",
       "cacheVariables": {
         "CMAKE_C_COMPILER": "clang-cl",
-        "CMAKE_CXX_COMPILER": "clang-cl",
-        "TRIBO_USE_PCH": "OFF"
+        "CMAKE_CXX_COMPILER": "clang-cl"
       }
     }
   ],
