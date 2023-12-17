@@ -17,10 +17,11 @@ set_target_properties(
   CXX_SCAN_FOR_MODULES OFF
 )
 
-# * Enable build information macros for one file only.
+# * Enable build information macros for one file only. PCH can't be used due to macro definition.
 set_source_files_properties(
   info.cpp main.cpp
   PROPERTIES
+  SKIP_PRECOMPILE_HEADERS YES
   COMPILE_DEFINITIONS TRIBO_PROJECT_VERSION_MAJOR=${TRIBO_PROJECT_VERSION_MAJOR}$<SEMICOLON>TRIBO_PROJECT_VERSION_MINOR=${TRIBO_PROJECT_VERSION_MINOR}$<SEMICOLON>TRIBO_PROJECT_VERSION_PATCH=${TRIBO_PROJECT_VERSION_PATCH}$<SEMICOLON>TRIBO_GIT_COMMIT_HASH=\"${TRIBO_GIT_COMMIT_HASH}\"
 )
 
