@@ -1,4 +1,7 @@
 #* GitHub x64 cloud runners.
+#* Checks for PR: title, cross-platform tests
+#* Checks for push/merge to main: cross-platform tests
+
 name: Build & Test - GitHub Runners
 
 #* For a pull request, we use the PR title. After a push (probably to main), we use the commit title.
