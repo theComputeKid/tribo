@@ -1,0 +1,23 @@
+doc:
+  - changed-files:
+      - any-glob-to-any-file: doc/**
+
+ci-cd:
+  - changed-files:
+      - any-glob-to-any-file: .github/**
+
+tools:
+  - changed-files:
+      - any-glob-to-any-file: ["scripts/**", "*"]
+
+internal-product:
+  - changed-files:
+      - any-glob-to-any-file: src/**
+
+external-product:
+  - changed-files:
+      - any-glob-to-any-file: include/**
+
+test:
+  - changed-files:
+      - any-glob-to-any-file: ["test/**", "**/test/**"]
