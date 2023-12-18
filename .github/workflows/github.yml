@@ -32,7 +32,10 @@ jobs:
         uses: actions/checkout@v4
       - if: ${{ github.event_name == 'pull_request' }}
         name: Pass pull request title through script.
-        run: ./scripts/commit-check.py "${{ github.event.pull_request.title }}"
+        run: ./scripts/commit-checks/pr-title.py "${{ github.event.pull_request.title }}"
+      - if: ${{ github.event_name == 'pull_request' }}
+        name: Pass pull request body through script.
+        run: ./scripts/commit-checks/pr-body.py "${{ github.event.pull_request.body }}"
 
   linux-x64-clang:
     runs-on: ubuntu-latest
