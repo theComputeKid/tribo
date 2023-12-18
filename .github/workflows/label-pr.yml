@@ -1,4 +1,7 @@
 name: "Pull Request Labeler"
+
+run-name: ${{ github.actor }} - Label PR
+
 on:
 - pull_request_target
 
@@ -10,3 +13,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/labeler@v5
+      with:
+        sync-labels: true
