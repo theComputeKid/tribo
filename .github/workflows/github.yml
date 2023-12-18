@@ -23,15 +23,17 @@ jobs:
 
   pr-title-check:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Pass pull request title through script.
+      - if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/checkout@v4
+      - if: ${{ github.event_name == 'pull_request' }}
+        name: Pass pull request title through script.
         run: ./scripts/commit-check.py "${{ github.event.pull_request.title }}"
 
   linux-x64-clang:
     runs-on: ubuntu-latest
     needs: pr-title-check
+    if: ${{ !(github.event_name == 'pull_request' && github.event.action == 'edited') }}
     steps:
       - uses: actions/checkout@v4
       - uses: lukka/get-cmake@latest
@@ -52,6 +54,7 @@ jobs:
   macos-x64-clang:
     runs-on: macos-latest
     needs: pr-title-check
+    if: ${{ !(github.event_name == 'pull_request' && github.event.action == 'edited') }}
     steps:
       - uses: actions/checkout@v4
       - uses: lukka/get-cmake@latest
@@ -78,6 +81,7 @@ jobs:
   windows-x64-clang:
     runs-on: windows-latest
     needs: pr-title-check
+    if: ${{ !(github.event_name == 'pull_request' && github.event.action == 'edited') }}
     steps:
       - uses: actions/checkout@v4
       - uses: TheMrMilchmann/setup-msvc-dev@v3
@@ -100,6 +104,7 @@ jobs:
   windows-x64-clang-cl:
     runs-on: windows-latest
     needs: pr-title-check
+    if: ${{ !(github.event_name == 'pull_request' && github.event.action == 'edited') }}
     steps:
       - uses: actions/checkout@v4
       - uses: TheMrMilchmann/setup-msvc-dev@v3
@@ -122,6 +127,7 @@ jobs:
   windows-x64-msvc:
     runs-on: windows-latest
     needs: pr-title-check
+    if: ${{ !(github.event_name == 'pull_request' && github.event.action == 'edited') }}
     steps:
       - uses: actions/checkout@v4
       - uses: TheMrMilchmann/setup-msvc-dev@v3
