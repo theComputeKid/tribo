@@ -56,6 +56,13 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE: 1
       - name: Build project (clang-code-check)
         run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && cmake --workflow --preset clang-code-check
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./build
+          fail_ci_if_error: true
+          files: ./build/Linux/clang/tribo.xml
 
   macos-x64-clang:
     runs-on: macos-latest
@@ -82,6 +89,13 @@ jobs:
         env:
           LDFLAGS: "-L$(brew --prefix llvm@17)/lib/c++ -Wl,-rpath,$(brew --prefix llvm@17)/lib/c++ -L$(brew --prefix llvm@17)/lib"
           CPPFLAGS: "-I$(brew --prefix llvm@17)/include"
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./build
+          fail_ci_if_error: true
+          files: ./build/Darwin/clang/tribo.xml
 
   windows-x64-clang:
     runs-on: windows-latest
@@ -104,6 +118,13 @@ jobs:
         run: choco upgrade llvm --version=17.0.6
       - name: Build project (clang-code-check)
         run: cmake --workflow --preset clang-code-check
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./build
+          fail_ci_if_error: true
+          files: ./build/Windows/clang/tribo.xml
 
   windows-x64-clang-cl:
     runs-on: windows-latest
@@ -126,6 +147,13 @@ jobs:
         run: choco upgrade llvm --version=17.0.6
       - name: Build project (clang-cl-code-check)
         run: cmake --workflow --preset clang-cl-code-check
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./build
+          fail_ci_if_error: true
+          files: ./build/Windows/clang-cl/tribo.xml
 
   windows-x64-msvc:
     runs-on: windows-latest
