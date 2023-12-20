@@ -22,8 +22,4 @@ include(${TRIBO_CMAKE_SCRIPTS_DIR}/project.cmake)
 include(${TRIBO_CMAKE_SCRIPTS_DIR}/3p.cmake)
 include(${TRIBO_CMAKE_SCRIPTS_DIR}/rules.cmake)
 
-add_subdirectory(src)
-
-if(TRIBO_ENABLE_TESTS)
-  add_subdirectory(test)
-endif(TRIBO_ENABLE_TESTS)
+add_subdirectory(components)

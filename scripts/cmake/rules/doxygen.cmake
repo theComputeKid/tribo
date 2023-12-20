@@ -8,7 +8,7 @@ if(DOXYGEN_FOUND)
   set(DOXYGEN_WARN_AS_ERROR YES)
   set(DOXYGEN_QUIET YES)
   doxygen_add_docs(doc
-    src test include
+    components
     ALL
   )
 endif(DOXYGEN_FOUND)
