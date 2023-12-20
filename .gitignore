@@ -9,3 +9,6 @@ build
 
 # * CMake
 CMakeUserPresets.json
+
+# * OS shenanigans
+.DS_Store
