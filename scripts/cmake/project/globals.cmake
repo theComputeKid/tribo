@@ -19,7 +19,7 @@ set(TRIBO_PROJECT_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 set(TRIBO_PRJ_NAME ${CMAKE_PROJECT_NAME})
 set(TRIBO_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(TRIBO_NAME_SEPERATOR "-") # Seperator in output names. e.g: libXYZ-ABC.so
-set(TRIBO_EXPORT_HEADER_DIR ${TRIBO_ROOT_DIR}/include)
+set(TRIBO_EXPORT_HEADER_DIR ${TRIBO_ROOT_DIR}/components/include)
 set(TRIBO_EXPORT_MACRO "TRIBO_EXPORT_API")
 
 # * This helps with test run order dependencies.

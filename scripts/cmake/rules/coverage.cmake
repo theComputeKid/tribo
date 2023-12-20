@@ -15,7 +15,7 @@ endif()
 if(TRIBO_CODE_COVERAGE_COMPILER_FLAG)
   add_test(
     NAME code-coverage
-    COMMAND gcovr --gcov-executable ${TRIBO_GCOV_EXE} --exclude build --exclude test --html-details ${CMAKE_CURRENT_BINARY_DIR}/tribo.html --cobertura ${CMAKE_CURRENT_BINARY_DIR}/tribo.xml --html-theme blue --fail-under-line ${TRIBO_CODE_COVERAGE_THRESHOLD}
+    COMMAND gcovr --gcov-executable ${TRIBO_GCOV_EXE} --exclude build --exclude-directories "(.+/)?test$" --html-details ${CMAKE_CURRENT_BINARY_DIR}/tribo.html --cobertura ${CMAKE_CURRENT_BINARY_DIR}/tribo.xml --html-theme blue --fail-under-line ${TRIBO_CODE_COVERAGE_THRESHOLD}
     CONFIGURATIONS CodeCheck
     WORKING_DIRECTORY ${TRIBO_ROOT_DIR}
   )

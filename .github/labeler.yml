@@ -10,14 +10,14 @@ tools:
   - changed-files:
       - any-glob-to-any-file: ["scripts/**", "*"]
 
-internal-product:
+src:
   - changed-files:
-      - any-glob-to-any-file: src/**
+      - any-glob-to-any-file: "**/src/**"
 
-external-product:
+main:
   - changed-files:
-      - any-glob-to-any-file: include/**
+      - any-glob-to-any-file: "components/main/**"
 
 test:
   - changed-files:
-      - any-glob-to-any-file: ["test/**", "**/test/**"]
+      - any-glob-to-any-file: "**/test/**"
