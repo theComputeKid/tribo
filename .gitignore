@@ -1,0 +1,14 @@
+# * IDE
+.cache
+.vscode
+.vs
+compile_commands.json
+
+# * Build artifacts
+build
+
+# * CMake
+CMakeUserPresets.json
+
+# * OS shenanigans
+.DS_Store
