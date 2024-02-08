@@ -1,0 +1,20 @@
+name: Auto assign pull requests
+run-name: ${{ github.actor }} - Assign PR
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Assign issues and pull requests
+        uses: gustavofreze/auto-assign@1.0.0
+        with:
+          assignees: "${{ github.actor }}"
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          allow_self_assign: "true"
+          allow_no_assignees: "true"
+          assignment_options: "PULL_REQUEST"
