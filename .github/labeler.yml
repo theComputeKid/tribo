@@ -1,0 +1,27 @@
+doc:
+  - changed-files:
+      - any-glob-to-any-file: ["doc/**", "README"]
+
+ci-cd:
+  - changed-files:
+      - any-glob-to-any-file: .github/**
+
+tools:
+  - changed-files:
+      - any-glob-to-any-file: ["scripts/**", ".gitignore", ".clang*"]
+
+src:
+  - changed-files:
+      - any-glob-to-any-file: ["src/**", "include/**"]
+
+test:
+  - changed-files:
+      - any-glob-to-any-file: "test/**"
+
+bench:
+  - changed-files:
+      - any-glob-to-any-file: "bench/**"
+
+legal:
+  - changed-files:
+      - any-glob-to-any-file: "LICENSE"
