@@ -1,0 +1,33 @@
+name: Build and Test
+
+#* For a pull request, we use the PR title. After a push (probably to main), we use the commit title.
+run-name: ${{ github.actor }} - ${{ github.event.head_commit.message || github.event.pull_request.title }}
+
+#* To avoid duplicate jobs running when both push and PR is satisfied, we use this:
+#* https://github.com/orgs/community/discussions/26940#discussioncomment-5686753
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+#* Stop stale workflows when pull requests are updated: https://stackoverflow.com/a/70972844
+#* Does not apply to the main branch.
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  #* Check PR title if PR.
+  pr-title-check:
+    runs-on: ubuntu-latest
+    steps:
+      - if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/checkout@v4
+      - if: ${{ github.event_name == 'pull_request' }}
+        name: Pass pull request title through script.
+        run: ./scripts/commit-checks/pr-title.py "${{ github.event.pull_request.title }}"
+      - if: ${{ github.event_name == 'pull_request' }}
+        name: Pass pull request body through script.
+        run: ./scripts/commit-checks/pr-body.py "${{ github.event.pull_request.body }}"
