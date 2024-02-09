@@ -31,3 +31,23 @@ jobs:
       - if: ${{ github.event_name == 'pull_request' }}
         name: Pass pull request body through script.
         run: ./scripts/commit-checks/pr-body.py "${{ github.event.pull_request.body }}"
+
+  os-default:
+    needs: pr-title-check
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, macos-14, windows-2022]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: 3.28
+          ninjaVersion: 1.11
+      - if: ${{ matrix.os == 'windows-2022' }}
+        name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
+      - name: Build project
+        run: cmake --workflow --preset default
