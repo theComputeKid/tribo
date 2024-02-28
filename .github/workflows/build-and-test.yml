@@ -32,7 +32,7 @@ jobs:
         name: Pass pull request body through script.
         run: ./scripts/commit-checks/pr-body.py "${{ github.event.pull_request.body }}"
 
-  os-default:
+  default:
     needs: pr-title-check
     strategy:
       matrix:
@@ -40,10 +40,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: 3.28
-          ninjaVersion: 1.11
       - if: ${{ matrix.os == 'windows-2022' }}
         name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
@@ -51,3 +47,158 @@ jobs:
           msbuild-architecture: x64
       - name: Build project
         run: cmake --workflow --preset default
+
+  linux-x64-clang:
+    runs-on: ubuntu-22.04
+    needs: pr-title-check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ssciwr/doxygen-install@v1
+        with:
+          version: "1.10.0"
+      - name: Install LLVM-17 and gcovr
+        run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install llvm@17 gcovr ninja
+      - name: Build project
+        run: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && cmake --workflow --preset clang-all
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./build
+          fail_ci_if_error: true
+          disable_search: true
+          verbose: true
+          files: ./build/Linux/clang/coverage.xml
+
+  macos-clang:
+    runs-on: macos-14
+    needs: pr-title-check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ssciwr/doxygen-install@v1
+        with:
+          version: "1.10.0"
+      - run: brew update
+      - name: Install LLVM-17, ninja and gcovr
+        run: brew install llvm@17 gcovr ninja
+      - name: Add LLVM-17 to path over system clang
+        run: echo "$(brew --prefix llvm@17)/bin" >> $GITHUB_PATH
+      - name: Build project
+        run: cmake --workflow --preset clang-all
+        env:
+          LDFLAGS: "-L$(brew --prefix llvm@17)/lib/c++ -Wl,-rpath,$(brew --prefix llvm@17)/lib/c++ -L$(brew --prefix llvm@17)/lib"
+          CPPFLAGS: "-I$(brew --prefix llvm@17)/include"
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./build
+          fail_ci_if_error: true
+          disable_search: true
+          verbose: true
+          files: ./build/Darwin/clang/coverage.xml
+
+  macos-gcc:
+    runs-on: macos-14
+    needs: pr-title-check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ssciwr/doxygen-install@v1
+        with:
+          version: "1.10.0"
+      - name: Install gcovr
+        run: brew install gcovr ninja
+      - name: Build project
+        run: cmake --workflow --preset gcc-13-all
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./build
+          fail_ci_if_error: true
+          disable_search: true
+          verbose: true
+          files: ./build/Darwin/gcc-13/coverage.xml
+
+  windows-x64-clang:
+    runs-on: windows-latest
+    needs: pr-title-check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
+      - uses: ssciwr/doxygen-install@v1
+        with:
+          version: "1.10.0"
+      - name: Install gcovr
+        run: pip install gcovr
+      - name: Install LLVM-17
+        run: choco upgrade llvm --version=17.0.6
+      - name: Build project
+        run: cmake --workflow --preset clang-all
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./build
+          fail_ci_if_error: true
+          disable_search: true
+          verbose: true
+          files: ./build/Windows/clang/coverage.xml
+
+  windows-x64-clang-cl:
+    runs-on: windows-latest
+    needs: pr-title-check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
+      - uses: ssciwr/doxygen-install@v1
+        with:
+          version: "1.10.0"
+      - name: Install gcovr
+        run: pip install gcovr
+      - name: Install LLVM-17
+        run: choco upgrade llvm --version=17.0.6
+      - name: Build project
+        run: cmake --workflow --preset clang-cl-all
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./build
+          fail_ci_if_error: true
+          disable_search: true
+          verbose: true
+          files: ./build/Windows/clang-cl/coverage.xml
+
+  windows-x64-msvc:
+    runs-on: windows-latest
+    needs: pr-title-check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
+          # https://github.com/actions/runner-images/issues/8891 ASAN issues.
+          toolset: 14.38
+      - uses: ssciwr/doxygen-install@v1
+        with:
+          version: "1.10.0"
+      - name: Install opencppcoverage
+        run: |
+          choco upgrade opencppcoverage
+          echo "$env:ProgramFiles\OpenCppCoverage" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Build project
+        run: cmake --workflow --preset msvc-all
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./build
+          fail_ci_if_error: true
+          disable_search: true
+          verbose: true
+          files: ./build/Windows/msvc/coverage.xml
