@@ -1,0 +1,36 @@
+doc:
+  - changed-files:
+      - any-glob-to-any-file: ["doc/**", "README.md"]
+
+ci-cd:
+  - changed-files:
+      - any-glob-to-any-file: .github/**
+
+tools:
+  - changed-files:
+      - any-glob-to-any-file:
+          ["tools/**", ".gitignore", ".clang*"]
+
+build:
+  - changed-files:
+      - any-glob-to-any-file: ["CMakeLists.txt", "**/.cmake"]
+
+interface:
+  - changed-files:
+      - any-glob-to-any-file: ["include/**"]
+
+src:
+  - changed-files:
+      - any-glob-to-any-file: ["src/**"]
+
+test:
+  - changed-files:
+      - any-glob-to-any-file: ["test/**"]
+
+bench:
+  - changed-files:
+      - any-glob-to-any-file: "bench/**"
+
+legal:
+  - changed-files:
+      - any-glob-to-any-file: "LICENSE"

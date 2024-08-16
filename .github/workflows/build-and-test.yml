@@ -1,0 +1,40 @@
+#* To avoid duplicate jobs running when both push and PR is satisfied, we use this:
+#* https://github.com/orgs/community/discussions/26940#discussioncomment-5686753
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+#* Stop stale workflows when pull requests are updated: https://stackoverflow.com/a/70972844
+#* Does not apply to the main branch.
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
+      - name: Build Project
+        run: cmake --version
+
+  linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Project
+        run: cmake --version
+
+  macos:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Project
+        run: cmake --version
