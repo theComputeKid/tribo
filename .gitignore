@@ -1,2 +1,7 @@
+build
+
 # IDEs
 .vscode
+
+# MacOS
+.DS_Store

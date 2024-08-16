@@ -23,18 +23,18 @@ jobs:
         with:
           msbuild-architecture: x64
       - name: Build Project
-        run: cmake --version
+        run: cmake -B build
 
   linux:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Build Project
-        run: cmake --version
+        run: cmake -B build
 
   macos:
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
       - name: Build Project
-        run: cmake --version
+        run: cmake -B build
