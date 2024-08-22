@@ -1,0 +1,149 @@
+{
+  "version": 8,
+  "include": [
+    "common.json"
+  ],
+  "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+  "configurePresets": [
+    {
+      "name": "msvc",
+      "inherits": "dev",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl",
+        "CMAKE_CXX_COMPILER": "cl"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "msvc",
+      "configuration": "Release",
+      "configurePreset": "msvc",
+      "targets": "install"
+    },
+    {
+      "name": "msvc-debug",
+      "configuration": "Debug",
+      "configurePreset": "msvc"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "msvc-debug",
+      "configuration": "Debug",
+      "configurePreset": "msvc",
+      "inherits": "test"
+    },
+    {
+      "name": "msvc",
+      "configuration": "Release",
+      "configurePreset": "msvc",
+      "inherits": "test"
+    },
+    {
+      "name": "msvc-bench",
+      "configuration": "Release",
+      "configurePreset": "msvc",
+      "inherits": "bench"
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "msvc",
+      "configurations": [
+        "Release"
+      ],
+      "configurePreset": "msvc"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "msvc",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc"
+        },
+        {
+          "type": "build",
+          "name": "msvc"
+        },
+        {
+          "type": "test",
+          "name": "msvc"
+        },
+        {
+          "type": "package",
+          "name": "msvc"
+        }
+      ]
+    },
+    {
+      "name": "msvc-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc"
+        },
+        {
+          "type": "build",
+          "name": "msvc-debug"
+        },
+        {
+          "type": "test",
+          "name": "msvc-debug"
+        }
+      ]
+    },
+    {
+      "name": "msvc-bench",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc"
+        },
+        {
+          "type": "build",
+          "name": "msvc"
+        },
+        {
+          "type": "test",
+          "name": "msvc-bench"
+        }
+      ]
+    },
+    {
+      "name": "msvc-all",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc"
+        },
+        {
+          "type": "build",
+          "name": "msvc-debug"
+        },
+        {
+          "type": "test",
+          "name": "msvc-debug"
+        },
+        {
+          "type": "build",
+          "name": "msvc"
+        },
+        {
+          "type": "test",
+          "name": "msvc"
+        },
+        {
+          "type": "test",
+          "name": "msvc-bench"
+        },
+        {
+          "type": "package",
+          "name": "msvc"
+        }
+      ]
+    }
+  ]
+}

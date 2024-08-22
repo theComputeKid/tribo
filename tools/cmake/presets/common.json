@@ -1,0 +1,87 @@
+{
+  "version": 8,
+  "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+  "configurePresets": [
+    {
+      "name": "common",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${hostSystemName}/${presetName}/install",
+        "CPACK_PACKAGE_DIRECTORY": "${sourceDir}/build/${hostSystemName}/${presetName}/package"
+      },
+      "binaryDir": "${sourceDir}/build/${hostSystemName}/${presetName}/tmp"
+    },
+    {
+      "name": "dev",
+      "hidden": true,
+      "inherits": "common",
+      "generator": "Ninja Multi-Config",
+      "cacheVariables": {
+        "FETCHCONTENT_UPDATES_DISCONNECTED": "ON",
+        "FETCHCONTENT_QUIET": "ON",
+        "TRIBO_ENABLE_BENCH": "ON",
+        "TRIBO_ENABLE_DOC": "ON",
+        "TRIBO_ENABLE_TESTS": "ON",
+        "TRIBO_ENABLE_WARNINGS": "ON",
+        "TRIBO_USE_PCH": "ON",
+        "TRIBO_ENABLE_CODECOVERAGE": "ON",
+        "TRIBO_ENABLE_SANITIZERS": "ON",
+        "TRIBO_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "libcxx",
+      "hidden": true,
+      "inherits": "dev",
+      "cacheVariables": {
+        "TRIBO_USE_LIBCXX": "ON"
+      }
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "common",
+      "hidden": true,
+      "output": {
+        "outputOnFailure": true,
+        "shortProgress": true,
+        "labelSummary": true,
+        "outputLogFile": "${sourceDir}/build/${hostSystemName}/${presetName}-test.log",
+        "outputJUnitFile": "${sourceDir}/build/${hostSystemName}/${presetName}-test.xml",
+        "verbosity": "default"
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": false
+      }
+    },
+    {
+      "name": "test",
+      "inherits": "common",
+      "hidden": true,
+      "filter": {
+        "exclude": {
+          "name": "tribo-perf-tests"
+        }
+      }
+    },
+    {
+      "name": "bench",
+      "inherits": "common",
+      "hidden": true,
+      "output": {
+        "verbosity": "verbose"
+      },
+      "filter": {
+        "exclude": {
+          "fixtures": {
+            "any": "tribo-correctness-tests"
+          }
+        },
+        "include": {
+          "name": "tribo-perf-tests"
+        }
+      }
+    }
+  ]
+}

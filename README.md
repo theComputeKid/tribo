@@ -3,4 +3,5 @@
    <p>the solution to all of your tribological needs</p>
    <img alt="GitHub License" src="https://img.shields.io/github/license/thecomputekid/tribo?style=for-the-badge&color=blue">
    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/theComputeKid/tribo/build-and-test.yml?style=for-the-badge">
+	<img alt="Lines of Code" src="https://tokei.rs/b1/github/thecomputekid/tribo?category=code&style=for-the-badge">
 </div>

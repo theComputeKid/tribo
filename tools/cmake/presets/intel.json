@@ -1,0 +1,150 @@
+{
+  "version": 8,
+  "include": [
+    "common.json"
+  ],
+  "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+  "configurePresets": [
+    {
+      "name": "intel",
+      "inherits": "dev",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "icx",
+        "CMAKE_CXX_COMPILER": "icx",
+        "TRIBO_GCOV_EXE": "llvm-cov gcov"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "intel",
+      "configuration": "Release",
+      "configurePreset": "intel",
+      "targets": "install"
+    },
+    {
+      "name": "intel-debug",
+      "configuration": "Debug",
+      "configurePreset": "intel"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "intel",
+      "configuration": "Release",
+      "configurePreset": "intel",
+      "inherits": "test"
+    },
+    {
+      "name": "intel-debug",
+      "configuration": "Debug",
+      "configurePreset": "intel",
+      "inherits": "test"
+    },
+    {
+      "name": "intel-bench",
+      "configuration": "Release",
+      "configurePreset": "intel",
+      "inherits": "bench"
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "intel",
+      "configurations": [
+        "Release"
+      ],
+      "configurePreset": "intel"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "intel",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "intel"
+        },
+        {
+          "type": "build",
+          "name": "intel"
+        },
+        {
+          "type": "test",
+          "name": "intel"
+        },
+        {
+          "type": "package",
+          "name": "intel"
+        }
+      ]
+    },
+    {
+      "name": "intel-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "intel"
+        },
+        {
+          "type": "build",
+          "name": "intel-debug"
+        },
+        {
+          "type": "test",
+          "name": "intel-debug"
+        }
+      ]
+    },
+    {
+      "name": "intel-bench",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "intel"
+        },
+        {
+          "type": "build",
+          "name": "intel"
+        },
+        {
+          "type": "test",
+          "name": "intel-bench"
+        }
+      ]
+    },
+    {
+      "name": "intel-all",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "intel"
+        },
+        {
+          "type": "build",
+          "name": "intel-debug"
+        },
+        {
+          "type": "test",
+          "name": "intel-debug"
+        },
+        {
+          "type": "build",
+          "name": "intel"
+        },
+        {
+          "type": "test",
+          "name": "intel"
+        },
+        {
+          "type": "test",
+          "name": "intel-bench"
+        },
+        {
+          "type": "package",
+          "name": "intel"
+        }
+      ]
+    }
+  ]
+}

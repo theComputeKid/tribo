@@ -1,7 +1,16 @@
+#* Project
 build
 
-# IDEs
+#* Clangd
+.cache
+compile_commands.json
+
+#* IDEs
 .vscode
+.vs
+
+#* Python virtual env
+.venv
 
 # MacOS
 .DS_Store

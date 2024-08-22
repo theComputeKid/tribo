@@ -1,0 +1,150 @@
+{
+  "version": 8,
+  "include": [
+    "common.json"
+  ],
+  "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+  "configurePresets": [
+    {
+      "name": "gcc",
+      "inherits": "dev",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++",
+        "TRIBO_GCOV_EXE": "gcov"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "gcc",
+      "configuration": "Release",
+      "configurePreset": "gcc",
+      "targets": "install"
+    },
+    {
+      "name": "gcc-debug",
+      "configuration": "Debug",
+      "configurePreset": "gcc"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "gcc",
+      "configuration": "Release",
+      "configurePreset": "gcc",
+      "inherits": "test"
+    },
+    {
+      "name": "gcc-debug",
+      "configuration": "Debug",
+      "configurePreset": "gcc",
+      "inherits": "test"
+    },
+    {
+      "name": "gcc-bench",
+      "configuration": "Release",
+      "configurePreset": "gcc",
+      "inherits": "bench"
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "gcc",
+      "configurations": [
+        "Release"
+      ],
+      "configurePreset": "gcc"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "gcc",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc"
+        },
+        {
+          "type": "build",
+          "name": "gcc"
+        },
+        {
+          "type": "test",
+          "name": "gcc"
+        },
+        {
+          "type": "package",
+          "name": "gcc"
+        }
+      ]
+    },
+    {
+      "name": "gcc-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc"
+        },
+        {
+          "type": "build",
+          "name": "gcc-debug"
+        },
+        {
+          "type": "test",
+          "name": "gcc-debug"
+        }
+      ]
+    },
+    {
+      "name": "gcc-bench",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc"
+        },
+        {
+          "type": "build",
+          "name": "gcc"
+        },
+        {
+          "type": "test",
+          "name": "gcc-bench"
+        }
+      ]
+    },
+    {
+      "name": "gcc-all",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc"
+        },
+        {
+          "type": "build",
+          "name": "gcc-debug"
+        },
+        {
+          "type": "test",
+          "name": "gcc-debug"
+        },
+        {
+          "type": "build",
+          "name": "gcc"
+        },
+        {
+          "type": "test",
+          "name": "gcc"
+        },
+        {
+          "type": "test",
+          "name": "gcc-bench"
+        },
+        {
+          "type": "package",
+          "name": "gcc"
+        }
+      ]
+    }
+  ]
+}

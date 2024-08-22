@@ -1,0 +1,150 @@
+{
+  "version": 8,
+  "include": [
+    "common.json"
+  ],
+  "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+  "configurePresets": [
+    {
+      "name": "gcc-13",
+      "inherits": "dev",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc-13",
+        "CMAKE_CXX_COMPILER": "g++-13",
+        "TRIBO_GCOV_EXE": "gcov-13"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "gcc-13",
+      "configuration": "Release",
+      "configurePreset": "gcc-13",
+      "targets": "install"
+    },
+    {
+      "name": "gcc-13-debug",
+      "configuration": "Debug",
+      "configurePreset": "gcc-13"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "gcc-13",
+      "configuration": "Release",
+      "configurePreset": "gcc-13",
+      "inherits": "test"
+    },
+    {
+      "name": "gcc-13-debug",
+      "configuration": "Debug",
+      "configurePreset": "gcc-13",
+      "inherits": "test"
+    },
+    {
+      "name": "gcc-13-bench",
+      "configuration": "Release",
+      "configurePreset": "gcc-13",
+      "inherits": "bench"
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "gcc-13",
+      "configurations": [
+        "Release"
+      ],
+      "configurePreset": "gcc-13"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "gcc-13",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc-13"
+        },
+        {
+          "type": "build",
+          "name": "gcc-13"
+        },
+        {
+          "type": "test",
+          "name": "gcc-13"
+        },
+        {
+          "type": "package",
+          "name": "gcc-13"
+        }
+      ]
+    },
+    {
+      "name": "gcc-13-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc-13"
+        },
+        {
+          "type": "build",
+          "name": "gcc-13-debug"
+        },
+        {
+          "type": "test",
+          "name": "gcc-13-debug"
+        }
+      ]
+    },
+    {
+      "name": "gcc-13-bench",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc-13"
+        },
+        {
+          "type": "build",
+          "name": "gcc-13"
+        },
+        {
+          "type": "test",
+          "name": "gcc-13-bench"
+        }
+      ]
+    },
+    {
+      "name": "gcc-13-all",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc-13"
+        },
+        {
+          "type": "build",
+          "name": "gcc-13-debug"
+        },
+        {
+          "type": "test",
+          "name": "gcc-13-debug"
+        },
+        {
+          "type": "build",
+          "name": "gcc-13"
+        },
+        {
+          "type": "test",
+          "name": "gcc-13"
+        },
+        {
+          "type": "test",
+          "name": "gcc-13-bench"
+        },
+        {
+          "type": "package",
+          "name": "gcc-13"
+        }
+      ]
+    }
+  ]
+}

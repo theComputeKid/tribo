@@ -1,0 +1,152 @@
+{
+  "version": 8,
+  "include": [
+    "common.json"
+  ],
+  "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+  "configurePresets": [
+    {
+      "name": "clang",
+      "inherits": "dev",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++",
+        "TRIBO_CLANG_TIDY": "clang-tidy",
+        "TRIBO_GCOV_EXE": "llvm-cov gcov"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "clang",
+      "configuration": "Release",
+      "configurePreset": "clang",
+      "targets": "install"
+    },
+    {
+      "name": "clang-debug",
+      "configuration": "Debug",
+      "configurePreset": "clang",
+      "targets": "install"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "clang",
+      "configuration": "Release",
+      "configurePreset": "clang",
+      "inherits": "test"
+    },
+    {
+      "name": "clang-debug",
+      "configuration": "Debug",
+      "configurePreset": "clang",
+      "inherits": "test"
+    },
+    {
+      "name": "clang-bench",
+      "configuration": "Release",
+      "configurePreset": "clang",
+      "inherits": "bench"
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "clang",
+      "configurations": [
+        "Release"
+      ],
+      "configurePreset": "clang"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "clang",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang"
+        },
+        {
+          "type": "build",
+          "name": "clang"
+        },
+        {
+          "type": "test",
+          "name": "clang"
+        },
+        {
+          "type": "package",
+          "name": "clang"
+        }
+      ]
+    },
+    {
+      "name": "clang-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang"
+        },
+        {
+          "type": "build",
+          "name": "clang-debug"
+        },
+        {
+          "type": "test",
+          "name": "clang-debug"
+        }
+      ]
+    },
+    {
+      "name": "clang-bench",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang"
+        },
+        {
+          "type": "build",
+          "name": "clang"
+        },
+        {
+          "type": "test",
+          "name": "clang-bench"
+        }
+      ]
+    },
+    {
+      "name": "clang-all",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang"
+        },
+        {
+          "type": "build",
+          "name": "clang-debug"
+        },
+        {
+          "type": "test",
+          "name": "clang-debug"
+        },
+        {
+          "type": "build",
+          "name": "clang"
+        },
+        {
+          "type": "test",
+          "name": "clang"
+        },
+        {
+          "type": "test",
+          "name": "clang-bench"
+        },
+        {
+          "type": "package",
+          "name": "clang"
+        }
+      ]
+    }
+  ]
+}

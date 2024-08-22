@@ -1,0 +1,52 @@
+# * Identify ClangCL.
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  if(CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
+    set(TRIBO_CLANG_CL TRUE)
+  else()
+    set(TRIBO_WINDOWS_CLANG TRUE)
+  endif()
+endif()
+
+if(APPLE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  # * CMake does not let GCC on MacOS generate PCH files properly.
+  set(TRIBO_USE_PCH OFF CACHE BOOL "" FORCE)
+
+  # * Asan not on mac aarch64 yet.
+  set(TRIBO_ENABLE_SANITIZERS OFF)
+endif()
+
+# * Set the warnings.
+if(TRIBO_ENABLE_WARNINGS)
+  set(TRIBO_CXX_FLAGS ${TRIBO_STANDARD_WARNINGS})
+else()
+  set(TRIBO_CXX_FLAGS ${TRIBO_NO_WARN_FLAG})
+endif(TRIBO_ENABLE_WARNINGS)
+
+if(TRIBO_ENABLE_CODECOVERAGE)
+  set(TRIBO_CXX_FLAGS ${TRIBO_CXX_FLAGS} $<$<CONFIG:DEBUG>:${TRIBO_CODE_COVERAGE_COMPILER_FLAG}>)
+  set(TRIBO_LINKER_FLAGS ${TRIBO_LINKER_FLAGS} $<$<CONFIG:DEBUG>:${TRIBO_CODE_COVERAGE_LINKER_FLAG}>)
+endif()
+
+if(TRIBO_ENABLE_SANITIZERS)
+  set(TRIBO_CXX_FLAGS ${TRIBO_CXX_FLAGS} $<$<CONFIG:DEBUG>:${TRIBO_ASAN_COMPILER_FLAG}>)
+  set(TRIBO_LINKER_FLAGS ${TRIBO_LINKER_FLAGS} $<$<CONFIG:DEBUG>:${TRIBO_ASAN_LINKER_FLAG}>)
+endif()
+
+# * Some compilers use libcxx by default anyways.
+if(TRIBO_USE_LIBCXX AND NOT APPLE AND NOT TRIBO_WINDOWS_CLANG)
+  set(TRIBO_USE_LIBCXX ON CACHE BOOL "" FORCE)
+elseif(TRIBO_USE_LIBCXX)
+  message(WARNING "Libcxx is not enabled for this compiler/platform for this project. Turning off.")
+  set(TRIBO_USE_LIBCXX OFF CACHE BOOL "" FORCE)
+endif()
+
+if(TRIBO_USE_LIBCXX)
+  set(TRIBO_CXX_FLAGS ${TRIBO_CXX_FLAGS} ${TRIBO_LIBCXX_COMPILER_FLAG})
+  set(TRIBO_LINKER_FLAGS ${TRIBO_LINKER_FLAGS} ${TRIBO_LIBCXX_LINKER_FLAG})
+endif()
+
+if(APPLE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  # Linker errors with xcode 15.
+  # https://forums.developer.apple.com/forums/thread/737707
+  set(TRIBO_LINKER_FLAGS ${TRIBO_LINKER_FLAGS} -Wl,-ld_classic)
+endif()

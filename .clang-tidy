@@ -1,0 +1,31 @@
+WarningsAsErrors: "*"
+FormatStyle: "file"
+
+Checks: "*,
+  -altera-*,
+  -fuchsia-*,
+  -google-*,
+  -llvm*,
+  -hicpp-*,
+  -bugprone-easily-swappable-parameters,
+  -modernize-pass-by-value,
+  -modernize-use-trailing-return-type,
+  -modernize-deprecated-headers,
+  -misc-non-private-member-variables-in-classes,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
+  -readability-identifier-length"
+
+CheckOptions:
+  readability-identifier-naming.VariableCase: lower_case
+  readability-identifier-naming.StructCase: CamelCase
+  readability-identifier-naming.GlobalFunctionCase: camelBack
+  readability-identifier-naming.FunctionCase: camelBack
+  readability-identifier-naming.EnumConstantCase: UPPER_CASE
+  readability-identifier-naming.GlobalVariableCase: UPPER_CASE
+  readability-identifier-naming.NamespaceCase: camelBack
+
+ExtraArgs:
+  # Clang-tidy cannot handle openmp pragmas (as of v17).
+  - -Wno-unknown-pragmas
+  # Clang-tidy cannot handle pch on windows without this.
+  - -Wno-microsoft-include

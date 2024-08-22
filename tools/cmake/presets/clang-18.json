@@ -1,0 +1,152 @@
+{
+  "version": 8,
+  "include": [
+    "common.json"
+  ],
+  "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+  "configurePresets": [
+    {
+      "name": "clang-18",
+      "inherits": "dev",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang-18",
+        "CMAKE_CXX_COMPILER": "clang++-18",
+        "TRIBO_CLANG_TIDY": "clang-tidy-18",
+        "TRIBO_USE_LIBCXX": "ON",
+        "TRIBO_GCOV_EXE": "llvm-cov-18 gcov"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "clang-18",
+      "configuration": "Release",
+      "configurePreset": "clang-18",
+      "targets": "install"
+    },
+    {
+      "name": "clang-18-debug",
+      "configuration": "Debug",
+      "configurePreset": "clang-18"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "clang-18",
+      "configuration": "Release",
+      "configurePreset": "clang-18",
+      "inherits": "test"
+    },
+    {
+      "name": "clang-18-debug",
+      "configuration": "Debug",
+      "configurePreset": "clang-18",
+      "inherits": "test"
+    },
+    {
+      "name": "clang-18-bench",
+      "configuration": "Release",
+      "configurePreset": "clang-18",
+      "inherits": "bench"
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "clang-18",
+      "configurations": [
+        "Release"
+      ],
+      "configurePreset": "clang-18"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "clang-18",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-18"
+        },
+        {
+          "type": "build",
+          "name": "clang-18"
+        },
+        {
+          "type": "test",
+          "name": "clang-18"
+        },
+        {
+          "type": "package",
+          "name": "clang-18"
+        }
+      ]
+    },
+    {
+      "name": "clang-18-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-18"
+        },
+        {
+          "type": "build",
+          "name": "clang-18-debug"
+        },
+        {
+          "type": "test",
+          "name": "clang-18-debug"
+        }
+      ]
+    },
+    {
+      "name": "clang-18-bench",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-18"
+        },
+        {
+          "type": "build",
+          "name": "clang-18"
+        },
+        {
+          "type": "test",
+          "name": "clang-18-bench"
+        }
+      ]
+    },
+    {
+      "name": "clang-18-all",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-18"
+        },
+        {
+          "type": "build",
+          "name": "clang-18-debug"
+        },
+        {
+          "type": "test",
+          "name": "clang-18-debug"
+        },
+        {
+          "type": "build",
+          "name": "clang-18"
+        },
+        {
+          "type": "test",
+          "name": "clang-18"
+        },
+        {
+          "type": "test",
+          "name": "clang-18-bench"
+        },
+        {
+          "type": "package",
+          "name": "clang-18"
+        }
+      ]
+    }
+  ]
+}

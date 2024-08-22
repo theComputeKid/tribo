@@ -1,5 +1,3 @@
-message(${CMAKE_BUILD_TYPE} hello)
-
 # * For multiconfig generators, we only do debug and release builds.
 if(CMAKE_CONFIGURATION_TYPES)
   set(
