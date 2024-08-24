@@ -12,3 +12,5 @@ jobs:
         run: python3 ./tools/pull-request-checks/title.py "${{ github.event.pull_request.title }}"
       - name: Pass pull request body through script.
         run: python3 ./tools/pull-request-checks/body.py "${{ github.event.pull_request.body }}"
+      - name: Pass num-commits through script.
+        run: python3 ./tools/pull-request-checks/num-commits.py ${{ github.event.pull_request.commits }}

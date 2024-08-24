@@ -34,7 +34,7 @@ set_source_files_properties(
 )
 
 target_link_libraries(${myTargetName}
-  PRIVATE GTest::gtest GTest::gtest_main ${CMAKE_PROJECT_NAME}
+  PRIVATE GTest::gtest GTest::gtest_main ${PROJECT_NAME}
 )
 
 # * These tests are part of the correctness test-suite.

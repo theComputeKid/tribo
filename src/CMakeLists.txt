@@ -1,5 +1,5 @@
 # * Get current folder basename to use as the output target name.
-set(myTargetName ${CMAKE_PROJECT_NAME})
+set(myTargetName ${PROJECT_NAME})
 
 add_library(
   ${myTargetName}

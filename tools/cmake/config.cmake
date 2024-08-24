@@ -11,7 +11,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/project/global.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/project/pch.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/project/cpack.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/project/test.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/project/bench-version-clone.cmake)
 
 # * Select compiler options based on compiler.
 include(${CMAKE_CURRENT_LIST_DIR}/compiler/clang.cmake)
@@ -25,6 +24,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/compiler/selection.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rules/compile-commands.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rules/coverage.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rules/doxygen.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/rules/bench.cmake)
 
 # * External dependencies.
 include(FetchContent)

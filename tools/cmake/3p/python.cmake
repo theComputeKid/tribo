@@ -1,7 +1,7 @@
 # Ensure python set up for google benchmark comparison reports.
 # Defines TRIBO_PYTHON_EXE
 
-if(NOT TRIBO_ENABLE_BENCH)
+if(NOT TRIBO_PERF_COMPARE)
   return()
 endif()
 
