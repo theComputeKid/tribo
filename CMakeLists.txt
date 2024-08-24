@@ -18,6 +18,7 @@ option(TRIBO_ENABLE_DOC "Enable doxygen documentation generation." OFF)
 option(TRIBO_ENABLE_SANITIZERS "Enable sanitizers in debug config." OFF)
 option(TRIBO_ENABLE_TESTS "Enable correctness tests." OFF)
 option(TRIBO_EXPORT_COMPILE_COMMANDS "Enable compile_commands.json generation." OFF)
+option(TRIBO_PERF_COMPARE "Compare performance with the previous commit." OFF)
 
 # * Load project configuration.
 include(${CMAKE_CURRENT_SOURCE_DIR}/tools/cmake/config.cmake)

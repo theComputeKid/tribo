@@ -1,4 +1,4 @@
-set(myTargetName "tribo-bench")
+set(myTargetName ${PROJECT_NAME}-bench)
 
 add_executable(
   ${myTargetName}
@@ -28,10 +28,8 @@ target_link_libraries(
   ${myTargetName}
   benchmark::benchmark_main
   benchmark::benchmark
-  ${CMAKE_PROJECT_NAME}
+  ${PROJECT_NAME}
 )
-
-add_dependencies(${myTargetName} ${CMAKE_PROJECT_NAME}-perf)
 
 add_pch(${myTargetName})
 
@@ -40,12 +38,23 @@ install(
   RUNTIME DESTINATION bin
 )
 
-add_test(
-  NAME ${TRIBO_PERFORMANCE_TESTS}
-  COMMAND ${TRIBO_PYTHON_EXE} ${googlebenchmark_SOURCE_DIR}/tools/compare.py benchmarks $<TARGET_FILE:tribo-bench> $<TARGET_FILE:tribo-bench>
-  CONFIGURATIONS Release
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)
+# * If we want to compare results, we need python.
+if(TRIBO_PERF_COMPARE)
+  add_dependencies(${myTargetName} ${PROJECT_NAME}-perf)
+  add_test(
+    NAME ${TRIBO_PERFORMANCE_TESTS}
+    COMMAND ${TRIBO_PYTHON_EXE} ${googlebenchmark_SOURCE_DIR}/tools/compare.py --dump_to_json bench.json benchmarks "${TRIBO_BASELINE_PERF_EXE}" $<TARGET_FILE:${PROJECT_NAME}-bench>
+    CONFIGURATIONS Release
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  )
+else()
+  add_test(
+    NAME ${TRIBO_PERFORMANCE_TESTS}
+    COMMAND $<TARGET_FILE:tribo-bench> --benchmark_out=bench.json
+    CONFIGURATIONS Release
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  )
+endif()
 
 # * Requires all the correctness tests to be run.
 set_tests_properties(

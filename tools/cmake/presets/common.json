@@ -26,7 +26,8 @@
         "TRIBO_USE_PCH": "ON",
         "TRIBO_ENABLE_CODECOVERAGE": "ON",
         "TRIBO_ENABLE_SANITIZERS": "ON",
-        "TRIBO_EXPORT_COMPILE_COMMANDS": "ON"
+        "TRIBO_EXPORT_COMPILE_COMMANDS": "ON",
+        "TRIBO_PERF_COMPARE": "ON"
       }
     },
     {
