@@ -18,7 +18,6 @@
       "generator": "Ninja Multi-Config",
       "cacheVariables": {
         "FETCHCONTENT_UPDATES_DISCONNECTED": "ON",
-        "FETCHCONTENT_QUIET": "ON",
         "TRIBO_ENABLE_BENCH": "ON",
         "TRIBO_ENABLE_DOC": "ON",
         "TRIBO_ENABLE_TESTS": "ON",

@@ -17,7 +17,12 @@ execute_process(
 
 if(myPythonHasNeededDeps AND NOT myPythonHasNeededDeps EQUAL 0)
   message("Detected python env does not have all deps installed. A virtual env is needed.")
-  set(TRIBO_PYTHON_EXE "${CMAKE_CURRENT_BINARY_DIR}/.venv/Scripts/python.exe")
+
+  if(WIN32)
+    set(TRIBO_PYTHON_EXE "${CMAKE_CURRENT_BINARY_DIR}/.venv/Scripts/python${CMAKE_EXECUTABLE_SUFFIX}")
+  else()
+    set(TRIBO_PYTHON_EXE "${CMAKE_CURRENT_BINARY_DIR}/.venv/bin/python${CMAKE_EXECUTABLE_SUFFIX}")
+  endif()
 
   if(NOT EXISTS "${TRIBO_PYTHON_EXE}")
     message("Creating a virtual env.")

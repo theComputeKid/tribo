@@ -16,6 +16,8 @@ option(TRIBO_ENABLE_BENCH "Enable performance tests." OFF)
 option(TRIBO_ENABLE_CODECOVERAGE "Enable code coverage generation in debug config." OFF)
 option(TRIBO_ENABLE_DOC "Enable doxygen documentation generation." OFF)
 option(TRIBO_ENABLE_SANITIZERS "Enable sanitizers in debug config." OFF)
+option(TRIBO_ENABLE_TUI "Enable the console frontend (text user interface)." ON)
+option(TRIBO_ENABLE_GUI "Enable the graphical frontend." OFF)
 option(TRIBO_ENABLE_TESTS "Enable correctness tests." OFF)
 option(TRIBO_EXPORT_COMPILE_COMMANDS "Enable compile_commands.json generation." OFF)
 option(TRIBO_PERF_COMPARE "Compare performance with the previous commit." OFF)
@@ -24,7 +26,7 @@ option(TRIBO_PERF_COMPARE "Compare performance with the previous commit." OFF)
 include(${CMAKE_CURRENT_SOURCE_DIR}/tools/cmake/config.cmake)
 
 # * Load subprojects.
-add_subdirectory(src)
+add_subdirectory(backend/cpp/src)
 
 if(TRIBO_ENABLE_TESTS)
   add_subdirectory(test)

@@ -9,7 +9,8 @@ if(TRIBO_ENABLE_DOC)
   set(DOXYGEN_QUIET YES)
   set(DOXYGEN_EXCLUDE_PATTERNS *.c*)
   doxygen_add_docs(doc
-    src
+    backend
+    ${TRIBO_EXPORT_HEADER_DIR}
     ALL
   )
   install(DIRECTORY "${CMAKE_BINARY_DIR}/doc/${PROJECT_NAME}" TYPE DOC)

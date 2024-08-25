@@ -10,7 +10,7 @@ if(TRIBO_ENABLE_TESTS)
     SYSTEM
     GIT_REPOSITORY https://github.com/google/googletest.git
     GIT_TAG main
-    GIT_PROGRESS TRUE
+    GIT_PROGRESS ON
     GIT_SHALLOW TRUE
     EXCLUDE_FROM_ALL
   )

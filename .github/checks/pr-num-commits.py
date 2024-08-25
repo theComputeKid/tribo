@@ -1,12 +1,17 @@
 #!/usr/bin/python3
-import argparse, re
+"""
+Check number of commits in a pull request:
+- Ensure only 1 commit per PR.
+
+Copyright (c) 2024 theComputeKid
+"""
+import argparse
 
 
-# * Ensuring everything fixes an issue.
 def __numCheck(num: int):
     if num != 1:
         raise ValueError(
-            f"Only a single commit is allowed. Please amend and force push commits."
+            f"Only a single commit is allowed. Please sqaush and force push commits."
         )
 
 

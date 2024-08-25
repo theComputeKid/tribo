@@ -16,6 +16,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/project/test.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compiler/clang.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compiler/clang-cl.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compiler/msvc.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/compiler/gnu.cmake)
 
 # * Select the correct compiler flags based on build configuration.
 include(${CMAKE_CURRENT_LIST_DIR}/compiler/selection.cmake)

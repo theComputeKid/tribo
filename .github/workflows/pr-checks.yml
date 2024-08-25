@@ -1,0 +1,34 @@
+# Perform checks on pull requests.
+name: PR Checks
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pass pull request title through script.
+        run: python3 ./.github/checks/pr-title.py "${{ github.event.pull_request.title }}"
+      - name: Pass pull request body through script.
+        run: python3 ./.github/checks/pr-body.py "${{ github.event.pull_request.body }}"
+      - name: Pass pull request num-commits through script.
+        run: python3 ./.github/checks/pr-num-commits.py ${{ github.event.pull_request.commits }}
+      - name: Pass pull request commit message through script.
+        run: python3 ./.github/checks/commit-msg.py "${{ github.event.pull_request.head.sha }}"
+      - name: Label pull request
+        uses: actions/labeler@v5
+        with:
+          sync-labels: true
+      - name: Assign pull requests
+        uses: gustavofreze/auto-assign@1.0.0
+        with:
+          assignees: "${{ github.actor }}"
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          allow_self_assign: "true"
+          allow_no_assignees: "true"
+          assignment_options: "PULL_REQUEST"

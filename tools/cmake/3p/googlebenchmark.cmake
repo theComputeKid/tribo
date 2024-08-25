@@ -13,7 +13,7 @@ if(TRIBO_ENABLE_BENCH)
     SYSTEM
     GIT_REPOSITORY https://github.com/google/benchmark.git
     GIT_TAG v1.8.3
-    GIT_PROGRESS TRUE
+    GIT_PROGRESS ON
     GIT_SHALLOW TRUE
     EXCLUDE_FROM_ALL
   )

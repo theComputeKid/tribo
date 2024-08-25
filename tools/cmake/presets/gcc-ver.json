@@ -6,143 +6,143 @@
   "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
   "configurePresets": [
     {
-      "name": "gcc-13",
+      "name": "gcc-14",
       "inherits": "dev",
       "cacheVariables": {
-        "CMAKE_C_COMPILER": "gcc-13",
-        "CMAKE_CXX_COMPILER": "g++-13",
-        "TRIBO_GCOV_EXE": "gcov-13"
+        "CMAKE_C_COMPILER": "gcc-14",
+        "CMAKE_CXX_COMPILER": "g++-14",
+        "TRIBO_GCOV_EXE": "gcov-14"
       }
     }
   ],
   "buildPresets": [
     {
-      "name": "gcc-13",
+      "name": "gcc-14",
       "configuration": "Release",
-      "configurePreset": "gcc-13",
+      "configurePreset": "gcc-14",
       "targets": "install"
     },
     {
-      "name": "gcc-13-debug",
+      "name": "gcc-14-debug",
       "configuration": "Debug",
-      "configurePreset": "gcc-13"
+      "configurePreset": "gcc-14"
     }
   ],
   "testPresets": [
     {
-      "name": "gcc-13",
+      "name": "gcc-14",
       "configuration": "Release",
-      "configurePreset": "gcc-13",
+      "configurePreset": "gcc-14",
       "inherits": "test"
     },
     {
-      "name": "gcc-13-debug",
+      "name": "gcc-14-debug",
       "configuration": "Debug",
-      "configurePreset": "gcc-13",
+      "configurePreset": "gcc-14",
       "inherits": "test"
     },
     {
-      "name": "gcc-13-bench",
+      "name": "gcc-14-bench",
       "configuration": "Release",
-      "configurePreset": "gcc-13",
+      "configurePreset": "gcc-14",
       "inherits": "bench"
     }
   ],
   "packagePresets": [
     {
-      "name": "gcc-13",
+      "name": "gcc-14",
       "configurations": [
         "Release"
       ],
-      "configurePreset": "gcc-13"
+      "configurePreset": "gcc-14"
     }
   ],
   "workflowPresets": [
     {
-      "name": "gcc-13",
+      "name": "gcc-14",
       "steps": [
         {
           "type": "configure",
-          "name": "gcc-13"
+          "name": "gcc-14"
         },
         {
           "type": "build",
-          "name": "gcc-13"
+          "name": "gcc-14"
         },
         {
           "type": "test",
-          "name": "gcc-13"
+          "name": "gcc-14"
         },
         {
           "type": "package",
-          "name": "gcc-13"
+          "name": "gcc-14"
         }
       ]
     },
     {
-      "name": "gcc-13-debug",
+      "name": "gcc-14-debug",
       "steps": [
         {
           "type": "configure",
-          "name": "gcc-13"
+          "name": "gcc-14"
         },
         {
           "type": "build",
-          "name": "gcc-13-debug"
+          "name": "gcc-14-debug"
         },
         {
           "type": "test",
-          "name": "gcc-13-debug"
+          "name": "gcc-14-debug"
         }
       ]
     },
     {
-      "name": "gcc-13-bench",
+      "name": "gcc-14-bench",
       "steps": [
         {
           "type": "configure",
-          "name": "gcc-13"
+          "name": "gcc-14"
         },
         {
           "type": "build",
-          "name": "gcc-13"
+          "name": "gcc-14"
         },
         {
           "type": "test",
-          "name": "gcc-13-bench"
+          "name": "gcc-14-bench"
         }
       ]
     },
     {
-      "name": "gcc-13-all",
+      "name": "gcc-14-all",
       "steps": [
         {
           "type": "configure",
-          "name": "gcc-13"
+          "name": "gcc-14"
         },
         {
           "type": "build",
-          "name": "gcc-13-debug"
+          "name": "gcc-14-debug"
         },
         {
           "type": "test",
-          "name": "gcc-13-debug"
+          "name": "gcc-14-debug"
         },
         {
           "type": "build",
-          "name": "gcc-13"
+          "name": "gcc-14"
         },
         {
           "type": "test",
-          "name": "gcc-13"
+          "name": "gcc-14"
         },
         {
           "type": "test",
-          "name": "gcc-13-bench"
+          "name": "gcc-14-bench"
         },
         {
           "type": "package",
-          "name": "gcc-13"
+          "name": "gcc-14"
         }
       ]
     }

@@ -3,31 +3,31 @@
 
 namespace tribo::test {
 
-void getInfoVersionMajor(benchmark::State &state) {
-  for ([[maybe_unused]] auto iter : state) {
-    auto result = triboGetInfoVersionMajor();
-    benchmark::DoNotOptimize(result);
+  void getInfoVersionMajor(benchmark::State& state) {
+    for ([[maybe_unused]] auto iter : state) {
+      auto result = triboGetInfoVersionMajor();
+      benchmark::DoNotOptimize(result);
+    }
   }
-}
 
-BENCHMARK(getInfoVersionMajor);
+  BENCHMARK(getInfoVersionMajor);
 
-void getInfoVersionMinor(benchmark::State &state) {
-  for ([[maybe_unused]] auto iter : state) {
-    auto result = triboGetInfoVersionMinor();
-    benchmark::DoNotOptimize(result);
+  void getInfoVersionMinor(benchmark::State& state) {
+    for ([[maybe_unused]] auto iter : state) {
+      auto result = triboGetInfoVersionMinor();
+      benchmark::DoNotOptimize(result);
+    }
   }
-}
 
-BENCHMARK(getInfoVersionMinor);
+  BENCHMARK(getInfoVersionMinor);
 
-void getInfoVersionPatch(benchmark::State &state) {
-  for ([[maybe_unused]] auto iter : state) {
-    auto result = triboGetInfoVersionPatch();
-    benchmark::DoNotOptimize(result);
+  void getInfoVersionPatch(benchmark::State& state) {
+    for ([[maybe_unused]] auto iter : state) {
+      auto result = triboGetInfoVersionPatch();
+      benchmark::DoNotOptimize(result);
+    }
   }
-}
 
-BENCHMARK(getInfoVersionPatch);
+  BENCHMARK(getInfoVersionPatch);
 
 } // namespace tribo::test

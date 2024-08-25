@@ -1,4 +1,10 @@
 #!/usr/bin/python3
+"""
+Check body of a pull request:
+- Ensure "Fixes #XXX" is present in the body.
+
+Copyright (c) 2024 theComputeKid
+"""
 import argparse, re
 
 

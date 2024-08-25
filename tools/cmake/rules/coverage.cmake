@@ -1,11 +1,12 @@
 if(TRIBO_ENABLE_CODECOVERAGE)
   include(CTest)
 
+  set(TRIBO_SRC_DIR backend)
   if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     # * Use opencppcoverage
     add_test(
       NAME code-coverage
-      COMMAND opencppcoverage --sources=tribo\\src --modules tribo.dll --excluded_sources build --export_type html --export_type cobertura:coverage.xml -- $<TARGET_FILE:tribo-test>
+      COMMAND opencppcoverage --sources=tribo\\${TRIBO_SRC_DIR} --modules tribo.dll --excluded_sources build --export_type html --export_type cobertura:coverage.xml -- $<TARGET_FILE:tribo-test>
       CONFIGURATIONS Debug
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
@@ -15,6 +16,7 @@ if(TRIBO_ENABLE_CODECOVERAGE)
     # * Threshold for passing code-coverage (% lines covered).
     set(TRIBO_CODE_COVERAGE_THRESHOLD 100)
 
+    # * Deduce whether to use gcov, or llvm-cov based on compiler.
     if(NOT TRIBO_GCOV_EXE)
       if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         set(TRIBO_GCOV_EXE "llvm-cov gcov")
@@ -25,7 +27,7 @@ if(TRIBO_ENABLE_CODECOVERAGE)
 
     add_test(
       NAME code-coverage
-      COMMAND gcovr --gcov-executable ${TRIBO_GCOV_EXE} --filter src --html-details ${CMAKE_CURRENT_BINARY_DIR}/coverage.html --cobertura ${CMAKE_CURRENT_BINARY_DIR}/coverage.xml --html-theme blue --fail-under-line ${TRIBO_CODE_COVERAGE_THRESHOLD} ${CMAKE_CURRENT_BINARY_DIR}
+      COMMAND gcovr --gcov-executable ${TRIBO_GCOV_EXE} --filter ${TRIBO_SRC_DIR} --html-details ${CMAKE_CURRENT_BINARY_DIR}/coverage.html --cobertura ${CMAKE_CURRENT_BINARY_DIR}/coverage.xml --html-theme blue --fail-under-line ${TRIBO_CODE_COVERAGE_THRESHOLD} ${CMAKE_CURRENT_BINARY_DIR}
       CONFIGURATIONS Debug
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     )
@@ -35,7 +37,7 @@ if(TRIBO_ENABLE_CODECOVERAGE)
     if(NOT WIN32)
       add_test(
         NAME delete-code-coverage
-        COMMAND find ${CMAKE_CURRENT_BINARY_DIR}/src -name "*.gcda" -type f -delete
+        COMMAND find ${CMAKE_CURRENT_BINARY_DIR}/${TRIBO_SRC_DIR} -name "*.gcda" -type f -delete
         CONFIGURATIONS Debug
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
       )

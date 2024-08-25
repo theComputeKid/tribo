@@ -34,37 +34,37 @@
 #endif
 
 /**
- * @brief Return the major version of the tribo project.
+ * @brief Returns the major version of the tribo project.
  * @return the major version of the project.
  */
 TRIBO_LINK int triboGetInfoVersionMajor(void);
 
 /**
- * @brief Return the minor version of the tribo project.
+ * @brief Returns the minor version of the tribo project.
  * @return the minor version of the project.
  */
 TRIBO_LINK int triboGetInfoVersionMinor(void);
 
 /**
- * @brief Return the patch version of the tribo project.
+ * @brief Returns the patch version of the tribo project.
  * @return the patch version of the project.
  */
 TRIBO_LINK int triboGetInfoVersionPatch(void);
 
 /**
- * @brief Return the git commit hash of the tribo project.
+ * @brief Returns a pointer to the git commit hash of the tribo project.
  * @return the major version of the project.
  */
 TRIBO_LINK char const* triboGetInfoGitCommitHash(void);
 
 /**
- * @brief Return the current git branch of the tribo project.
+ * @brief Returns a pointer to the current git branch name of the tribo project.
  * @return the minor version of the project.
  */
 TRIBO_LINK char const* triboGetInfoGitBranchName(void);
 
 /**
- * @brief Return the git commit number on the current branch of the tribo project.
+ * @brief Returns the git commit number on the current branch of the tribo project.
  * @return the patch version of the project.
  */
 TRIBO_LINK int triboInfoGitCommitNumber(void);
