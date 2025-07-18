@@ -1,0 +1,66 @@
+name: "Build Premake"
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+# Declare default permissions as read only.
+permissions: read-all
+
+jobs:
+    premake-build:
+      strategy:
+        matrix:
+          os: [macos-15, ubuntu-24.04, ubuntu-24.04-arm, windows-2022, windows-11-arm]
+      runs-on: ${{ matrix.os }}
+      steps:
+
+        - uses: actions/checkout@v4
+          with:
+            ref: ${{ github.event.pull_request.head.sha }}
+            submodules: true
+
+        - name: Get Premake commit hash for cache key
+          id: get_premake_commit_hash
+          run: echo "PremakeCommitHash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          shell: bash
+          working-directory: ./external/premake-core
+
+        - name: Restore cached Premake
+          id: restore_premake_cache
+          uses: actions/cache/restore@v4
+          with:
+            key: ${{ matrix.os }}-premake-${{ steps.get_premake_commit_hash.outputs.PremakeCommitHash }}
+            path: ./premake5*
+            lookup-only: true
+
+        - name: Install Premake dependencies (Linux)
+          if: ${{ steps.restore_premake_cache.outputs.cache-hit != 'true' && contains(matrix.os,'ubuntu') }}
+          run: sudo apt update && sudo apt install -y uuid-dev
+
+        - name: Build Premake (Unix)
+          if: ${{ steps.restore_premake_cache.outputs.cache-hit != 'true' && !contains(matrix.os,'windows') }}
+          run: ./premake-build.sh
+          working-directory: ./external
+
+        - name: Build Premake (Windows x64)
+          if: ${{ steps.restore_premake_cache.outputs.cache-hit != 'true' && contains(matrix.os,'windows') && !contains(matrix.os,'arm') }}
+          run: ./premake-build.bat
+          working-directory: ./external
+
+        # Windows 11 arm does not yet compile premake due to vs license issues.
+        # So we pull a release version for x64 and use it in emulated mode.
+        - name: Get Premake (Windows Arm)
+          if: ${{ steps.restore_premake_cache.outputs.cache-hit != 'true' && contains(matrix.os,'windows') && contains(matrix.os,'arm') }}
+          run: |
+            Invoke-WebRequest -Uri 'https://github.com/premake/premake-core/releases/download/v5.0.0-beta7/premake-5.0.0-beta7-windows.zip' -OutFile 'premake.zip'
+            Expand-Archive -Path premake.zip -DestinationPath ..
+          working-directory: ./external
+
+        - name: Save Premake in cache
+          id: save_premake_cache
+          if: ${{ steps.restore_premake_cache.outputs.cache-hit != 'true' }}
+          uses: actions/cache/save@v4
+          with:
+            key: ${{ matrix.os }}-premake-${{ steps.get_premake_commit_hash.outputs.PremakeCommitHash }}
+            path: ./premake5*

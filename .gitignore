@@ -1,6 +1,9 @@
-#* IDEs
+# IDEs
 .vscode
 .vs
 
-#* MacOS
+# MacOS
 .DS_Store
+
+# Premake (build placed in root directory)
+/premake5*

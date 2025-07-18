@@ -1,0 +1,4 @@
+[submodule "external/premake-core"]
+	path = external/premake-core
+	url = https://github.com/premake/premake-core.git
+	shallow = true

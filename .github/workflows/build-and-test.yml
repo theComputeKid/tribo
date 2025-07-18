@@ -1,7 +1,7 @@
 name: Build & Test
 
-#* To avoid duplicate jobs running when both push and PR is satisfied, we use this:
-#* https://github.com/orgs/community/discussions/26940#discussioncomment-5686753
+# To avoid duplicate jobs running when both push and PR is satisfied, we use this:
+# https://github.com/orgs/community/discussions/26940#discussioncomment-5686753
 on:
   push:
     branches:
@@ -9,17 +9,22 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
-#* Stop stale workflows when pull requests are updated: https://stackoverflow.com/a/70972844
-#* Does not apply to the main branch.
+# Stop stale workflows when pull requests are updated: https://stackoverflow.com/a/70972844
+# Does not apply to the main branch.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
-#* Declare default permissions as read only.
+# Declare default permissions as read only.
 permissions: read-all
 
 jobs:
+
+  premake-build:
+    uses: ./.github/workflows/premake-build.yml
+
   build-and-test:
+    needs: premake-build
     strategy:
       matrix:
         os: [macos-15, ubuntu-24.04, ubuntu-24.04-arm, windows-2022, windows-11-arm]
@@ -28,3 +33,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          submodules: true
+      - name: Get Premake commit hash for cache key
+        id: get_premake_commit_hash
+        run: echo "PremakeCommitHash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        shell: bash
+        working-directory: ./external/premake-core
+      - name: Restore cached Premake
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ matrix.os }}-premake-${{ steps.get_premake_commit_hash.outputs.PremakeCommitHash }}
+          path: ./premake5*
+          fail-on-cache-miss: true
+      - name: Run Premake
+        run: ./premake5 --version
