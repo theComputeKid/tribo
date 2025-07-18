@@ -1,0 +1,30 @@
+name: Build & Test
+
+#* To avoid duplicate jobs running when both push and PR is satisfied, we use this:
+#* https://github.com/orgs/community/discussions/26940#discussioncomment-5686753
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+#* Stop stale workflows when pull requests are updated: https://stackoverflow.com/a/70972844
+#* Does not apply to the main branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+#* Declare default permissions as read only.
+permissions: read-all
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        os: [macos-15, ubuntu-24.04, ubuntu-24.04-arm, windows-2022, windows-11-arm]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
