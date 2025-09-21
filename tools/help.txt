@@ -1,0 +1,23 @@
+--------------
+Build targets:
+--------------
+
+all, app, base
+
+----------------
+Utility targets:
+----------------
+
+run:      run tests after building everything.
+cc:       create compile_commands.json.
+deps:     [nmake] create -MMD equivalent header dependencies.
+clean:    cleans all build artifacts
+rebuild:  cleans and rebuilds
+
+----------------------
+Environment variables:
+----------------------
+CC                        C compiler to use
+CUDA=1                    enables CUDA.
+CUDA_PATH=/path/to/cuda   path to CUDA installation.
+DEBUG=1                   enables debug mode

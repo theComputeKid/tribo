@@ -1,0 +1,14 @@
+# Project
+bin
+tmp
+
+# Clangd
+.cache
+compile_commands.json
+
+# IDEs
+.vscode
+.vs
+
+# MacOS
+.DS_Store

@@ -1,0 +1,82 @@
+name: Build and Test
+
+# To avoid duplicate jobs running when both push and PR is satisfied, we use this:
+# https://github.com/orgs/community/discussions/26940#discussioncomment-5686753
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Stop stale workflows when pull requests are updated: https://stackoverflow.com/a/70972844
+# Does not apply to the main branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        system:
+          [
+            { os: linux, arch: x64, tag: ubuntu-24.04 },
+            { os: linux, arch: arm64, tag: ubuntu-24.04-arm },
+            { os: macos, arch: arm64, tag: macos-26 },
+            { os: windows, arch: x64, tag: windows-2025 },
+            { os: windows, arch: arm64, tag: windows-11-arm },
+          ]
+        compiler: [
+            cc, # Default compiler for each OS.
+            clang,
+            gcc,
+          ]
+        config: [
+            { name: debug, makeflags: DEBUG=1 }, # Tests with ASAN.
+            { name: release, makeflags: "" },
+          ]
+        # TODO: Setup GCC for windows.
+        exclude:
+          - system: { os: windows, arch: x64, tag: windows-2025 }
+            compiler: gcc
+          - system: { os: windows, arch: arm64, tag: windows-11-arm }
+            compiler: gcc
+    runs-on: ${{ matrix.system.tag }}
+    name: ${{ matrix.system.os }}-${{ matrix.system.arch }}-${{ matrix.compiler }}-${{ matrix.config.name }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-environment
+        with:
+          compiler: ${{ matrix.compiler }}
+          os: ${{ matrix.system.tag }}
+
+      - name: Build
+        uses: ./.github/actions/run-build
+        with:
+          target: all
+          makeflags: ${{ matrix.config.makeflags }}
+  cuda:
+    strategy:
+      matrix:
+        system:
+          [
+            { os: linux, arch: x64, tag: ubuntu-24.04 },
+            { os: linux, arch: arm64, tag: ubuntu-24.04-arm },
+          ]
+        config: [release]
+        compiler: [cuda]
+    runs-on: ${{ matrix.system.tag }}
+    container: nvidia/cuda:13.0.1-devel-ubuntu24.04
+    name: ${{ matrix.system.os }}-${{ matrix.system.arch }}-${{ matrix.compiler }}-${{ matrix.config }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check compiler version
+        run: nvcc --version
+        shell: bash
