@@ -1,0 +1,39 @@
+name: "Run Build"
+description: Sets up the required compilation environment
+
+inputs:
+  target:
+    description: makefile target to build.
+    required: false
+    default: all
+  makeflags:
+    description: flags to pass to the make program.
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build with NMake on Windows x64
+      if: ${{ runner.os == 'Windows' && runner.arch == 'X64' }}
+      run: |
+        . 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\Launch-VsDevShell.ps1' -Arch amd64
+        nmake ${{ inputs.target }} ${{ inputs.makeflags }}
+      shell: pwsh
+
+    - name: Build with NMake on Windows ARM64
+      if: ${{ runner.os == 'Windows' && runner.arch == 'ARM64' }}
+      run: |
+        . 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\Launch-VsDevShell.ps1' -Arch arm64
+        nmake ${{ inputs.target }} ${{ inputs.makeflags }}
+      shell: pwsh
+
+    - name: Build with GNU make on Linux
+      if: ${{ runner.os == 'Linux' }}
+      run: make ${{ inputs.target }} ${{ inputs.makeflags }} -j$(nproc)
+      shell: bash
+
+    - name: Build with GNU make on MacOS
+      if: ${{ runner.os == 'macOS' }}
+      run: make ${{ inputs.target }} ${{ inputs.makeflags }} -j$(sysctl -n hw.ncpu)
+      shell: bash
