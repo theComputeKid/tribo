@@ -1,0 +1,98 @@
+name: "Setup Environment"
+description: Sets up CC/CXX and clang-tidy environment variables.
+
+inputs:
+  compiler:
+    description: the compiler to use.
+    required: true
+  os:
+    description: the os to build on.
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup compiler version
+      id: set-compiler-versions
+      run: |
+        echo "clang_choco_version=$CLANG_CHOCO_VERSION" >> $GITHUB_OUTPUT
+        echo "clang_version=$CLANG_VERSION" >> $GITHUB_OUTPUT
+        echo "gcc_version=$GCC_VERSION" >> $GITHUB_OUTPUT
+      shell: bash
+      env:
+        CLANG_CHOCO_VERSION: 21.1.0
+        CLANG_VERSION: 21
+        GCC_VERSION: 14
+
+    - name: Setup default compiler for MacOS and Linux
+      if: ${{ runner.os != 'Windows' && inputs.compiler == 'cc' }}
+      run: |
+        echo "CC=cc" >> "$GITHUB_ENV"
+        echo "CXX=c++" >> "$GITHUB_ENV"
+      shell: bash
+
+    - name: Setup clang for MacOS
+      if: ${{ runner.os == 'macOS' && contains(inputs.compiler,'clang') }}
+      run: |
+        CLANG_VERSION=${{ steps.set-compiler-versions.outputs.clang_version }}
+        brew install llvm@$CLANG_VERSION
+        echo "$(brew --prefix llvm@$CLANG_VERSION)/bin" >> "$GITHUB_PATH"
+        echo "CC=$(brew --prefix llvm@$CLANG_VERSION)/bin/clang" >> "$GITHUB_ENV"
+        echo "CXX=$(brew --prefix llvm@$CLANG_VERSION)/bin/clang++" >> "$GITHUB_ENV"
+        echo "CLANGTIDY=$(brew --prefix llvm@$CLANG_VERSION)/bin/clang-tidy" >> "$GITHUB_ENV"
+        echo "RUNCLANGTIDY=$(brew --prefix llvm@$CLANG_VERSION)/bin/run-clang-tidy" >> "$GITHUB_ENV"
+      shell: bash
+
+    - name: Setup gcc for MacOS
+      if: ${{ runner.os == 'macOS' && contains(inputs.compiler,'gcc') }}
+      run: |
+        GGC_VERSION=${{ steps.set-compiler-versions.outputs.gcc_version }}
+        brew install gcc@$GGC_VERSION
+        echo "CC=$(brew --prefix gcc@$GGC_VERSION)/bin/gcc-$GGC_VERSION" >> "$GITHUB_ENV"
+        echo "CXX=$(brew --prefix gcc@$GGC_VERSION)/bin/g++-$GGC_VERSION" >> "$GITHUB_ENV"
+      shell: bash
+
+    - name: Setup clang for Linux
+      if: ${{ contains(inputs.os,'ubuntu') && contains(inputs.compiler,'clang') }}
+      run: |
+        CLANG_VERSION=${{ steps.set-compiler-versions.outputs.clang_version }}
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        sudo ./llvm.sh $CLANG_VERSION all
+        echo "CC=clang-$CLANG_VERSION" >> "$GITHUB_ENV"
+        echo "CXX=clang++-$CLANG_VERSION" >> "$GITHUB_ENV"
+        echo "CLANGTIDY=clang-tidy-$CLANG_VERSION" >> "$GITHUB_ENV"
+        echo "RUNCLANGTIDY=run-clang-tidy-$CLANG_VERSION" >> "$GITHUB_ENV"
+      shell: bash
+
+    - name: Setup gcc for Linux
+      if: ${{ contains(inputs.os,'ubuntu') && contains(inputs.compiler,'gcc') }}
+      run: |
+        GGC_VERSION=${{ steps.set-compiler-versions.outputs.gcc_version }}
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+        sudo apt-get update
+        sudo apt-get install -y g++-$GGC_VERSION
+        echo "CC=gcc-$GGC_VERSION" >> "$GITHUB_ENV"
+        echo "CXX=g++-$GGC_VERSION" >> "$GITHUB_ENV"
+      shell: bash
+
+    - name: Setup msvc compiler for Windows
+      if: ${{ runner.os == 'Windows' && inputs.compiler == 'cc' }}
+      run: |
+        echo CC=cl >> %GITHUB_ENV%
+        echo CXX=cl >> %GITHUB_ENV%
+      shell: cmd
+
+    - name: Setup clang for windows
+      if: ${{ runner.os == 'Windows' && contains(inputs.compiler,'clang') }}
+      run: |
+        choco install llvm --version=${{ steps.set-compiler-versions.outputs.clang_choco_version }} --force --limit-output --no-progress
+        echo CC="C:\Program Files\LLVM\bin\clang-cl">> %GITHUB_ENV%
+        echo CXX="C:\Program Files\LLVM\bin\clang-cl">> %GITHUB_ENV%
+        echo LLVM_DIR="C:\Program Files\LLVM">> %GITHUB_ENV%
+      shell: cmd
+
+    - name: Setup make for windows
+      if: ${{ runner.os == 'Windows' }}
+      run: choco install make --force --limit-output --no-progress
+      shell: cmd

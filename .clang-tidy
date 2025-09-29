@@ -1,0 +1,29 @@
+WarningsAsErrors: "*"
+FormatStyle: "file"
+
+Checks: "
+  misc-*,
+  clang-analyzer-*,
+  cert-*,
+  bugprone-*,
+  openmp-*,
+  readability-*,
+  portability-*,
+  -clang-analyzer-security.VAList,
+  -clang-analyzer-valist.Uninitialized,
+  -portability-avoid-pragma-once,
+  -misc-misplaced-const,
+  -bugprone-easily-swappable-parameters,
+  -readability-identifier-length,
+  -readability-magic-numbers,
+  -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling"
+
+CheckOptions:
+  readability-identifier-naming.EnumConstantCase: UPPER_CASE
+  readability-identifier-naming.GlobalVariableCase: UPPER_CASE
+  readability-identifier-naming.VariableCase: lower_case
+  readability-identifier-naming.StructCase: CamelCase
+  readability-identifier-naming.FunctionCase: camelBack
+  readability-identifier-naming.NamespaceCase: lower_case
+
+UseColor: true
