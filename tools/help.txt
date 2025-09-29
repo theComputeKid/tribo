@@ -1,0 +1,53 @@
+--------------
+Build targets:
+--------------
+
+all, app, base, cuda
+
+----------------
+Utility targets:
+----------------
+
+run:      run tests after building everything.
+cc:       create compile_commands.json.
+deps:     [nmake] create -MMD equivalent header dependencies.
+clean:    cleans all build artifacts
+rebuild:  cleans and rebuilds all
+
+----------------------
+Environment variables:
+----------------------
+
+CC          C compiler to use.
+
+NVCC        CUDA compiler to use.
+            Defaults:
+            Linux: /usr/local/cuda/bin/nvcc
+            Windows: nvcc
+            MacOS: Not used
+
+CUDA_PATH   Used by clang-tidy to parse CUDA.
+            Defaults:
+            Linux: /usr/local/cuda
+            Windows: %CUDA_PATH%
+
+DEBUG       Enables debug mode
+            Default: DEBUG=0
+
+LLVM_DIR    Used for finding clang-tidy.
+            Defaults:
+            MacOS: $(brew --prefix llvm)
+            Windows: C:\Program Files\LLVM
+            Linux: Not used
+
+CLANGTIDY   Clang-tidy executable to use.
+            Defaults:
+            Linux: clang-tidy
+            MacOS: $(LLVM_DIR)/bin/clang-tidy
+            Windows: %LLVM_DIR%/bin/clang-tidy.exe
+
+RUNCLANGTIDY  Run-clang-tidy executable to use.
+              Defaults:
+              Linux: run-clang-tidy
+              MacOS: $(LLVM_DIR)/bin/run-clang-tidy
+              Windows: %LLVM_DIR%/bin/run-clang-tidy

@@ -1,0 +1,11 @@
+CompileFlags:
+  Add:
+    # Disable warnings for empty translation units - false positive from clangd
+    # in vscode: https://github.com/clangd/clangd/issues/2358
+    - -Wno-empty-translation-unit
+---
+If:
+  PathMatch: .*\.h
+
+CompileFlags:
+  Add: -xc-header
