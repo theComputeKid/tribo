@@ -1,0 +1,85 @@
+name: 'Setup Environment'
+description: Sets up the required compilation environment
+
+inputs:
+  compiler:
+    description: the compiler to use.
+    required: true
+  version:
+    description: version of the compiler to use.
+    required: false
+  os:
+    description: the os to build on.
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: Setup clang for MacOS
+      if: ${{ contains(inputs.os,'macos') && contains(inputs.compiler,'brew-clang') }}
+      run: |
+        brew update
+        brew install llvm@${{ inputs.version }} lld@${{ inputs.version }}
+        echo "$(brew --prefix llvm@${{ inputs.version }})/bin" >> "$GITHUB_PATH"
+        echo "$(brew --prefix lld@${{ inputs.version }})/bin" >> "$GITHUB_PATH"
+        echo "CXX=$(brew --prefix llvm@${{ inputs.version }})/bin/clang++" >> "$GITHUB_ENV"
+        echo "AR=$(brew --prefix llvm@${{ inputs.version }})/bin/llvm-ar" >> "$GITHUB_ENV"
+        echo "TIDY=$(brew --prefix llvm@${{ inputs.version }})/bin/clang-tidy" >> "$GITHUB_ENV"
+      shell: bash
+
+    - name: Setup gcc for MacOS
+      if: ${{ contains(inputs.os,'macos') && contains(inputs.compiler,'gcc') }}
+      run: |
+        brew update
+        brew install gcc@${{ inputs.version }}
+        echo "CXX=g++-${{ inputs.version }}" >> "$GITHUB_ENV"
+        echo "AR=gcc-ar-${{ inputs.version }}" >> "$GITHUB_ENV"
+      shell: bash
+
+    - name: Setup clang for Linux
+      if: ${{ contains(inputs.os,'ubuntu') && contains(inputs.compiler,'clang') }}
+      run: |
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        sudo ./llvm.sh ${{ inputs.version }} all
+        echo "AR=llvm-ar-${{ inputs.version }}" >> "$GITHUB_ENV"
+        echo "CXX=clang++-${{ inputs.version }}" >> "$GITHUB_ENV"
+        echo "TIDY=clang-tidy-${{ inputs.version }}" >> "$GITHUB_ENV"
+        sudo apt install libc++-dev -y
+      shell: bash
+
+    - name: Setup gcc for Linux
+      if: ${{ contains(inputs.os,'ubuntu') && contains(inputs.compiler,'gcc') }}
+      run: |
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+        sudo apt-get update
+        sudo apt-get install -y gcc-${{ inputs.version }}
+        echo "AR=gcc-ar-${{ inputs.version }}" >> "$GITHUB_ENV"
+        echo "CXX=g++-${{ inputs.version }}" >> "$GITHUB_ENV"
+      shell: bash
+
+    - name: Install make for Windows
+      if: ${{ contains(inputs.os,'windows') }}
+      run: choco install make
+      shell: cmd
+
+    - name: Setup clang for Windows
+      if: ${{ contains(inputs.os,'windows') && contains(inputs.compiler,'clang') }}
+      run: |
+        echo "AR=llvm-ar" >> "$GITHUB_ENV"
+        echo "CXX=clang++" >> "$GITHUB_ENV"
+        echo "TIDY=clang-tidy" >> "$GITHUB_ENV"
+      shell: bash
+
+    - name: Setup clang for Windows (x64)
+      if: ${{ contains(inputs.os,'windows') && contains(inputs.compiler,'clang') && !contains(inputs.os,'arm') }}
+      run: choco install llvm --version=${{ inputs.version }}
+      shell: bash
+
+    - name: Setup msvc for Windows
+      if: ${{ contains(inputs.os,'windows') && contains(inputs.compiler,'msvc') }}
+      run: |
+        echo "CXX=cl" >> "$GITHUB_ENV"
+        echo "AR=lib" >> "$GITHUB_ENV"
+      shell: bash

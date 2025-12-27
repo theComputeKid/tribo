@@ -1,0 +1,81 @@
+name: Build & Test
+
+# To avoid duplicate jobs running when both push and PR is satisfied, we use this:
+# https://github.com/orgs/community/discussions/26940#discussioncomment-5686753
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Stop stale workflows when pull requests are updated: https://stackoverflow.com/a/70972844
+# Does not apply to the main branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+# Declare default permissions as read only.
+permissions: read-all
+
+jobs:
+
+  linux:
+    strategy:
+      matrix:
+        os: [
+          {label: ubuntu_x64, image: ubuntu-24.04},
+          {label: ubuntu_arm64, image: ubuntu-24.04-arm}
+        ]
+        compiler: [ clang, gcc ]
+
+    name: ${{ matrix.os.label }}_${{ matrix.compiler }}
+    runs-on: ${{ matrix.os.image }}
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check compiler version
+        run: ${{ matrix.compiler }} --version
+        shell: bash
+
+      - name: Install libomp
+        if: matrix.compiler == 'clang'
+        run: sudo apt install libomp-dev -y
+        shell: bash
+
+      - name: Build
+        run: make CC=${{ matrix.compiler }} -j`nproc`
+        shell: bash
+
+      - name: Run
+        run: make run
+        shell: bash
+
+  macos:
+    strategy:
+      matrix:
+        compiler: [
+          {name: clang, path: clang, openmp: 0},
+          {name: gcc, path: gcc-15, openmp: 1}
+        ]
+
+    name: macos_arm64_${{ matrix.compiler.name }}
+    runs-on: macos-26
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check compiler version
+        run: ${{ matrix.compiler.path }} --version
+        shell: bash
+
+      - name: Build
+        run: make CC=${{ matrix.compiler.path }} OPENMP=${{ matrix.compiler.openmp }} -j`sysctl -n hw.ncpu`
+        shell: bash
+
+      - name: Run
+        run: make run
+        shell: bash
