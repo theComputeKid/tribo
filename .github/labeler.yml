@@ -1,0 +1,35 @@
+doc:
+  - changed-files:
+      - any-glob-to-any-file: ["doc/**", "README.md"]
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: [".github/**"]
+
+tools:
+  - changed-files:
+      - any-glob-to-any-file: ["tools/**", "**/.gitignore", "**/.clang*"]
+
+build:
+  - changed-files:
+      - any-glob-to-any-file: ["**/*makefile"]
+
+interface:
+  - changed-files:
+      - any-glob-to-any-file: ["src/include/**"]
+
+src:
+  - changed-files:
+      - any-glob-to-any-file: ["src/**"]
+
+app:
+  - changed-files:
+      - any-glob-to-any-file: ["src/app/**"]
+
+base:
+  - changed-files:
+      - any-glob-to-any-file: ["src/base/**"]
+
+legal:
+  - changed-files:
+      - any-glob-to-any-file: ["**/LICENSE*"]

@@ -1,0 +1,8 @@
+-std=c11
+-I../include
+-Wall
+-Werror
+-Wpedantic
+-Wextra
+-D_CRT_SECURE_NO_WARNINGS
+-DTRIBO_UTILS_EXPORT

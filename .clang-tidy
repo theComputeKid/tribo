@@ -1,0 +1,19 @@
+WarningsAsErrors: "*"
+FormatStyle: "file"
+
+Checks: "-*,
+  misc-*,
+  cert-*,
+  -readability-identifier-length"
+
+CheckOptions:
+  readability-identifier-naming.VariableCase: lower_case
+  readability-identifier-naming.StructCase: CamelCase
+  readability-identifier-naming.FunctionCase: camelBack
+  readability-identifier-naming.EnumConstantCase: UPPER_CASE
+  readability-identifier-naming.GlobalVariableCase: UPPER_CASE
+  readability-identifier-naming.NamespaceCase: lower_case
+
+ExtraArgs:
+  # Clang-tidy cannot handle openmp pragmas (as of v17).
+  # - -Wno-unknown-pragmas
