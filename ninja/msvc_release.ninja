@@ -1,0 +1,9 @@
+cc = cl
+cxx = cl
+link = link
+lib = lib
+
+build_config = release
+toolkit = msvc
+
+include ninja/setup.ninja

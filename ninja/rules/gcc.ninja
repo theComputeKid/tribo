@@ -1,0 +1,23 @@
+rule compile_c
+  command = $cc -c $inc_dir $c_flags -MF $out.d $in -o $out
+  deps = gcc
+  depfile = $out.d
+  description = Compile: $in -> $out
+
+rule compile_c_avx2
+  command = $cc -c $inc_dir $c_flags $ccxx_avx2_flags -MF $out.d $in -o $out
+  deps = gcc
+  depfile = $out.d
+  description = Compile: $in -> $out
+
+rule link_exe
+  command = $link $ld_flags $in -o $out
+  description = Link EXE: $out
+
+rule link_dll
+  command = $link -shared $ld_flags $in -o $out
+  description = Link DLL: $out
+
+rule archive
+  command = $lib $ar_flags $out $in
+  description = Archive: $out

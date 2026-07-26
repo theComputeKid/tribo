@@ -1,0 +1,24 @@
+ccxx_flags = $
+  -O3 $
+  -MMD $
+  -Wall $
+  -Wextra $
+  -Wpedantic $
+  -Werror
+
+c_flags = -std=c99 $ccxx_flags
+cxx_flags = -std=c++23 $ccxx_flags
+
+ccxx_opt_flags = $
+  -fverbose-asm $
+  -save-temps=obj $
+  -fsave-optimization-record $
+  -fopt-info-loop-optimized $
+  -fopt-info-loop-missed
+
+ccxx_flags_avx2 = -mavx2 $ccxx_opt_flags
+
+ld_flags =
+
+ar_flags = rcs
+

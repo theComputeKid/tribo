@@ -1,0 +1,19 @@
+ccxx_flags = $
+  -g $
+  -O0 $
+  -MMD $
+  -fno-omit-frame-pointer $
+  -fsanitize=address,undefined $
+  -Wall $
+  -Wextra $
+  -Wpedantic $
+  -Werror
+
+c_flags = -std=c99 $ccxx_flags
+cxx_flags = -std=c++23 $ccxx_flags
+
+ccxx_flags_avx2 = -mavx2
+
+ld_flags = -fsanitize=address,undefined
+
+ar_flags = rcs

@@ -1,0 +1,26 @@
+ccxx_flags = $
+  /diagnostics:caret $
+  /external:anglebrackets $
+  /external:W0 $
+  /W4 $
+  /WX $
+  /nologo $
+  /showIncludes $
+  /options:strict $
+  /permissive- $
+  /FC $
+  /Zc:preprocessor $
+  /openmp $
+  /Od $
+  /Zi $
+  /MDd $
+  /fsanitize=address
+
+c_flags = /std:c11 /TC /Zc:__STDC__ $ccxx_flags
+cxx_flags = /std:c++latest /TP /Zc:__cplusplus /EHsc $ccxx_flags
+
+ccxx_flags_avx2 = /arch:AVX2
+
+ld_flags = /NOLOGO /WX /DEBUG:FULL
+
+ar_flags = /NOLOGO /WX

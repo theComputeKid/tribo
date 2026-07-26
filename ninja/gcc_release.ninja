@@ -1,0 +1,9 @@
+cc = gcc-16
+cxx = g++-16
+link = gcc-16
+lib = ar
+
+build_config = release
+toolkit = gcc
+
+include ninja/setup.ninja

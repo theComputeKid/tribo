@@ -1,0 +1,9 @@
+cc = clang
+cxx = clang++
+link = clang
+lib = ar
+
+build_config = debug
+toolkit = clang
+
+include ninja/setup.ninja

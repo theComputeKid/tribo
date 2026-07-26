@@ -1,0 +1,2 @@
+# The default Ninja build is with the clang driver in release mode.
+include ninja/clang_release.ninja

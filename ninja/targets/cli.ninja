@@ -1,0 +1,6 @@
+build $tmp_dir/cli/main.obj: compile_c src/cli/main.c
+
+build $bin_dir/tribo-cli.exe: link_exe $
+  $tmp_dir/cli/main.obj
+
+build cli: phony $bin_dir/tribo-cli.exe

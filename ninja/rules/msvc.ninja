@@ -1,0 +1,17 @@
+rule compile_c
+  command = $cc /c $c_flags $in /Fo:$out /Fd$out.pdb
+  deps = msvc
+  description = Compile: $in -> $out
+
+rule compile_c_avx2
+  command = $cc /c $c_flags $ccxx_avx2_flags $in /Fo:$out /Fd$out.pdb /Fa$out.asm
+  deps = msvc
+  description = Compile: $in -> $out
+
+rule link_exe
+  command = $link $ld_flags $in /OUT:$out /PDB:$out.pdb
+  description = Link EXE: $out
+
+rule archive
+  command = $lib $in $arflags /OUT:$out
+  description = Archive: $out
