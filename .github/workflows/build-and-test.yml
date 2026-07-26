@@ -1,0 +1,162 @@
+name: Build and Test
+
+# To avoid duplicate jobs running when both push and PR is satisfied, we use this:
+# https://github.com/orgs/community/discussions/26940#discussioncomment-5686753
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Stop stale workflows when pull requests are updated: https://stackoverflow.com/a/70972844
+# Does not apply to the main branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  linux:
+    strategy:
+      matrix:
+        system:
+          [
+            { arch: x64, tag: ubuntu-26.04 },
+            { arch: arm64, tag: ubuntu-26.04-arm },
+          ]
+        compiler: [clang, gcc]
+        config: [debug, release]
+    runs-on: ${{ matrix.system.tag }}
+    name: linux-${{ matrix.system.arch }}-${{ matrix.compiler }}-${{ matrix.config }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Compiler check
+        run: ${{ matrix.compiler }} --version
+
+      - name: Build
+        run: ninja -f ninja/${{ matrix.compiler }}_${{ matrix.config }}.ninja
+
+      - name: Run
+        run: ninja -f ninja/${{ matrix.compiler }}_${{ matrix.config }}.ninja run
+
+  windows-clang:
+    strategy:
+      matrix:
+        system:
+          [
+            { arch: x64, tag: windows-2025 },
+            { arch: arm64, tag: windows-11-vs2026-arm },
+          ]
+        config: [release]
+    runs-on: ${{ matrix.system.tag }}
+    name: windows-${{ matrix.system.arch }}-clang-${{ matrix.config }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Compiler check
+        run: clang --version
+
+      - name: Build
+        run: ninja -f ninja/clang_${{ matrix.config }}.ninja
+
+      - name: Run
+        run: ninja -f ninja/clang_${{ matrix.config }}.ninja run
+
+  windows-msvc:
+    strategy:
+      matrix:
+        system:
+          [
+            { arch: x64, tag: windows-2025 },
+            { arch: arm64, tag: windows-11-vs2026-arm },
+          ]
+        config: [debug, release]
+    runs-on: ${{ matrix.system.tag }}
+    name: windows-${{ matrix.system.arch }}-msvc-${{ matrix.config }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up MSVC
+        uses: TheMrMilchmann/setup-msvc-dev@v4
+        with:
+          arch: ${{ matrix.system.arch }}
+
+      - name: Build
+        run: ninja -f ninja/msvc_${{ matrix.config }}.ninja
+
+      - name: Run
+        run: ninja -f ninja/msvc_${{ matrix.config }}.ninja run
+
+  macos-brew-gcc:
+    strategy:
+      matrix:
+        config: [debug, release]
+    runs-on: macos-26
+    name: macos-arm64-gcc-${{ matrix.config }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Compiler check
+        shell: bash
+        run: |
+          shopt -s expand_aliases
+          alias gcc=gcc-15
+          gcc --version
+
+      - name: Build
+        run: |
+          shopt -s expand_aliases
+          alias gcc=gcc-15
+          ninja -f ninja/gcc_${{ matrix.config }}.ninja
+
+      - name: Run
+        run: ninja -f ninja/gcc_${{ matrix.config }}.ninja run
+
+  macos-brew-clang:
+    strategy:
+      matrix:
+        config: [debug, release]
+    runs-on: macos-26
+    name: macos-arm64-brew-clang-${{ matrix.config }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Compiler check
+        shell: bash
+        run: |
+          shopt -s expand_aliases
+          alias clang=$(brew --prefix llvm@20)/bin/clang
+          clang --version
+
+      - name: Build
+        run: |
+          shopt -s expand_aliases
+          alias clang=$(brew --prefix llvm@20)/bin/clang
+          ninja -f ninja/clang_${{ matrix.config }}.ninja
+
+      - name: Run
+        run: ninja -f ninja/clang_${{ matrix.config }}.ninja run
+
+  macos-clang:
+    strategy:
+      matrix:
+        config: [debug, release]
+    runs-on: macos-26
+    name: macos-arm64-clang-${{ matrix.config }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Compiler check
+        shell: bash
+        run: clang --version
+
+      - name: Build
+        run: ninja -f ninja/clang_${{ matrix.config }}.ninja
+
+      - name: Run
+        run: ninja -f ninja/clang_${{ matrix.config }}.ninja run

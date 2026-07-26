@@ -1,6 +1,6 @@
-cc = gcc-16
-cxx = g++-16
-link = gcc-16
+cc = gcc
+cxx = g++
+link = gcc
 lib = ar
 
 build_config = release
