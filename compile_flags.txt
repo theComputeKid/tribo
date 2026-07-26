@@ -1,0 +1,5 @@
+-xc
+-std=c99
+-Iinclude
+-Ivendor
+-D_CRT_SECURE_NO_WARNINGS

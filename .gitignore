@@ -1,0 +1,11 @@
+# Build output folders
+/build
+/bin
+/tmp
+
+# Cache folders
+.cache
+.vscode
+
+# Files
+compile_commands.json
